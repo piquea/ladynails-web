@@ -1,6 +1,7 @@
 -- =============================================================
 --  LADY NAILS WEB — Esquema de base de datos (Supabase)
---  Cómo usarlo: Supabase → SQL Editor → New query → pegar todo → Run
+--  Proyecto: ladynails-web (organización Lady Nails, plan Free) — ya aplicado el 23/11/2026
+--  Cómo usarlo en un proyecto nuevo: Supabase → SQL Editor → New query → pegar todo → Run
 -- =============================================================
 
 create table if not exists reservas (
@@ -38,11 +39,12 @@ create table if not exists bloqueos_agenda (
   cupos       int not null default 3,               -- 3 = nadie atiende; 1 = falta una manicurista
   motivo      text
 );
+create index if not exists bloqueos_fecha on bloqueos_agenda (fecha);
 
 -- Seguridad: nadie desde el navegador puede leer ni escribir; solo el servidor de la web.
 alter table reservas        enable row level security;
 alter table bloqueos_agenda enable row level security;
 
 -- Bucket privado para las constancias de pago
-insert into storage.buckets (id, name, public) values ('constancias', 'constancias', false)
+insert into storage.buckets (id, name, public, file_size_limit) values ('constancias', 'constancias', false, 5242880)
 on conflict (id) do nothing;
