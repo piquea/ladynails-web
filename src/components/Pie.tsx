@@ -31,15 +31,16 @@ export default function Pie() {
           </div>
           <div>
             <h4>Síguenos</h4>
-            <a href={NEGOCIO.instagram} target="_blank" rel="noopener" aria-label="Instagram">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" /></svg>
+            <a href={NEGOCIO.instagram} target="_blank" rel="noopener">@ladynails.pe</a>
+            <a href={NEGOCIO.instagram} target="_blank" rel="noopener" aria-label="Instagram" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" /></svg>@ladynails.pe
             </a>
           </div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="pie-gigante" src="/marca/logo-crema.png" alt="" width={900} height={226} />
       </footer>
-      <p className="legal">© {new Date().getFullYear()} Lady Nails Studio · Chacarilla, Lima</p>
+      <p className="legal">{NEGOCIO.lema} · © {new Date().getFullYear()} Lady Nails Studio · Chacarilla, Lima</p>
     </div>
   );
 }

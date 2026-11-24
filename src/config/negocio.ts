@@ -5,9 +5,10 @@
 
 export const NEGOCIO = {
   nombre: "Lady Nails Studio",
-  whatsapp: "51900000000", // COMPLETAR: con código de país, sin + ni espacios
-  whatsappVisible: "900 000 000", // COMPLETAR
-  instagram: "https://www.instagram.com/", // COMPLETAR
+  whatsapp: "51946441428", // con código de país, sin + ni espacios
+  whatsappVisible: "946 441 428",
+  instagram: "https://www.instagram.com/ladynails.pe/",
+  lema: "Perfect nails. Every time.",
   email: "ladynails.adm@gmail.com",
   direccion: "Av. Caminos del Inca 131, Edificio G, Of. 305 – Santiago de Surco",
   referencia: "Frente a Sodimac de Chacarilla",

@@ -33,7 +33,7 @@ export default function Inicio() {
       {/* HERO */}
       <section className="contenedor hero">
         <div className="hero-texto">
-          <p className="eyebrow sube">Lady Nails Studio · Chacarilla</p>
+          <p className="eyebrow sube">Perfect nails. Every time. · Lady Nails Studio</p>
           <h1 className="titulo-xl sube sube-2">
             Uñas impecables.<br />
             Un momento <span className="it">solo tuyo.</span>
