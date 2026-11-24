@@ -1,0 +1,334 @@
+{
+ "grupos": [
+  {
+   "id": "manicure",
+   "nombre": "Manicure"
+  },
+  {
+   "id": "pedicure",
+   "nombre": "Pedicure"
+  },
+  {
+   "id": "manipedi",
+   "nombre": "ManiPedi"
+  },
+  {
+   "id": "retoque",
+   "nombre": "Retoques"
+  },
+  {
+   "id": "retiro",
+   "nombre": "Retiro de otro studio"
+  },
+  {
+   "id": "diseno",
+   "nombre": "Diseño"
+  }
+ ],
+ "servicios": [
+  {
+   "codigo": "MNC001",
+   "grupo": "manicure",
+   "nombre": "Detox",
+   "precio": 45.0,
+   "duracion": 30,
+   "sub": "Tradicionales"
+  },
+  {
+   "codigo": "MNC002",
+   "grupo": "manicure",
+   "nombre": "Esmaltado tradicional",
+   "precio": 50.0,
+   "duracion": 45,
+   "sub": "Tradicionales"
+  },
+  {
+   "codigo": "MNC003",
+   "grupo": "manicure",
+   "nombre": "Esmaltado gel",
+   "precio": 65.0,
+   "duracion": 60,
+   "sub": "Gel"
+  },
+  {
+   "codigo": "MNC004",
+   "grupo": "manicure",
+   "nombre": "Rubber gel",
+   "precio": 85.0,
+   "duracion": 60,
+   "sub": "Gel"
+  },
+  {
+   "codigo": "MNC005",
+   "grupo": "manicure",
+   "nombre": "Polygel",
+   "precio": 130.0,
+   "duracion": 120,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC006",
+   "grupo": "manicure",
+   "nombre": "Polygel con tips",
+   "precio": 150.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC007",
+   "grupo": "manicure",
+   "nombre": "Acrílicas con tips",
+   "precio": 150.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC008",
+   "grupo": "manicure",
+   "nombre": "Builder gel",
+   "precio": 150.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC009",
+   "grupo": "manicure",
+   "nombre": "Builder gel con tips",
+   "precio": 170.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC010",
+   "grupo": "manicure",
+   "nombre": "Esculpidas acrílicas",
+   "precio": 190.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC011",
+   "grupo": "manicure",
+   "nombre": "Esculpidas polygel",
+   "precio": 190.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC012",
+   "grupo": "manicure",
+   "nombre": "Esculpidas builder gel",
+   "precio": 200.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "MNC013",
+   "grupo": "manicure",
+   "nombre": "Soft gel",
+   "precio": 150.0,
+   "duracion": 120,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ001",
+   "grupo": "retoque",
+   "nombre": "Rubber gel",
+   "precio": 75.0,
+   "duracion": 90,
+   "sub": "Gel"
+  },
+  {
+   "codigo": "RTQ002",
+   "grupo": "retoque",
+   "nombre": "Polygel",
+   "precio": 100.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ003",
+   "grupo": "retoque",
+   "nombre": "Acrílicas",
+   "precio": 100.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ004",
+   "grupo": "retoque",
+   "nombre": "Builder gel",
+   "precio": 120.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ005",
+   "grupo": "retoque",
+   "nombre": "Esculpidas acrílicas",
+   "precio": 140.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ006",
+   "grupo": "retoque",
+   "nombre": "Esculpidas polygel",
+   "precio": 140.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTQ007",
+   "grupo": "retoque",
+   "nombre": "Esculpidas builder gel",
+   "precio": 150.0,
+   "duracion": 150,
+   "sub": "Extensiones"
+  },
+  {
+   "codigo": "RTR001",
+   "grupo": "retiro",
+   "nombre": "Esmaltado gel",
+   "precio": 20.0,
+   "duracion": 15,
+   "sub": "Otro studio"
+  },
+  {
+   "codigo": "RTR002",
+   "grupo": "retiro",
+   "nombre": "Rubber gel",
+   "precio": 25.0,
+   "duracion": 30,
+   "sub": "Otro studio"
+  },
+  {
+   "codigo": "RTR003",
+   "grupo": "retiro",
+   "nombre": "Polygel",
+   "precio": 40.0,
+   "duracion": 30,
+   "sub": "Otro studio"
+  },
+  {
+   "codigo": "RTR004",
+   "grupo": "retiro",
+   "nombre": "Acrílicas",
+   "precio": 40.0,
+   "duracion": 30,
+   "sub": "Otro studio"
+  },
+  {
+   "codigo": "RTR005",
+   "grupo": "retiro",
+   "nombre": "Builder gel",
+   "precio": 50.0,
+   "duracion": 30,
+   "sub": "Otro studio"
+  },
+  {
+   "codigo": "DSN001",
+   "grupo": "diseno",
+   "nombre": "Clásico",
+   "precio": 0.0,
+   "duracion": 10,
+   "sub": "Diseño"
+  },
+  {
+   "codigo": "DSN002",
+   "grupo": "diseno",
+   "nombre": "Signature",
+   "precio": 15.0,
+   "duracion": 20,
+   "sub": "Diseño"
+  },
+  {
+   "codigo": "DSN003",
+   "grupo": "diseno",
+   "nombre": "Premium",
+   "precio": 25.0,
+   "duracion": 30,
+   "sub": "Diseño"
+  },
+  {
+   "codigo": "PDC001",
+   "grupo": "pedicure",
+   "nombre": "Detox",
+   "precio": 45.0,
+   "duracion": 35,
+   "sub": "Tradicionales"
+  },
+  {
+   "codigo": "PDC002",
+   "grupo": "pedicure",
+   "nombre": "Esmaltado tradicional",
+   "precio": 50.0,
+   "duracion": 45,
+   "sub": "Tradicionales"
+  },
+  {
+   "codigo": "PDC003",
+   "grupo": "pedicure",
+   "nombre": "Esmaltado gel",
+   "precio": 65.0,
+   "duracion": 60,
+   "sub": "Gel"
+  },
+  {
+   "codigo": "PDC004",
+   "grupo": "pedicure",
+   "nombre": "Rubber gel",
+   "precio": 85.0,
+   "duracion": 70,
+   "sub": "Gel"
+  },
+  {
+   "codigo": "PCK001",
+   "grupo": "manipedi",
+   "nombre": "ManiPedi Detox",
+   "precio": 85.0,
+   "duracion": 60,
+   "sub": "Tradicionales",
+   "incluye": [
+    "Manicure Detox",
+    "Pedicure Detox"
+   ]
+  },
+  {
+   "codigo": "PCK002",
+   "grupo": "manipedi",
+   "nombre": "ManiPedi Tradicional",
+   "precio": 95.0,
+   "duracion": 90,
+   "sub": "Tradicionales",
+   "incluye": [
+    "Manicure Esmaltado tradicional",
+    "Pedicure Esmaltado tradicional"
+   ]
+  },
+  {
+   "codigo": "PCK003",
+   "grupo": "manipedi",
+   "nombre": "ManiPedi Gel",
+   "precio": 110.0,
+   "duracion": 120,
+   "sub": "Gel",
+   "incluye": [
+    "Manicure Esmaltado gel",
+    "Pedicure Esmaltado gel"
+   ]
+  },
+  {
+   "codigo": "PCK004",
+   "grupo": "manipedi",
+   "nombre": "ManiPedi Rubber gel",
+   "precio": 130.0,
+   "duracion": 130,
+   "sub": "Gel",
+   "incluye": [
+    "Manicure Rubber gel",
+    "Pedicure Rubber gel"
+   ]
+  }
+ ]
+}
