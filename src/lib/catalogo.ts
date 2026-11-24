@@ -9,6 +9,7 @@ export type Servicio = {
   duracion: number;
   sub: string;
   incluye?: string[];
+  detalle?: string;
   activo?: boolean;
 };
 

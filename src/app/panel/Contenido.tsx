@@ -79,6 +79,7 @@ export default function Contenido() {
                 <input type="number" min={0} step="0.5" placeholder="—" value={s.precioAntes ?? ""} onChange={(e) => updServ(s.codigo, { precioAntes: e.target.value ? Number(e.target.value) : undefined })} />
                 <input type="number" min={0} step={5} value={s.duracion} onChange={(e) => updServ(s.codigo, { duracion: Number(e.target.value) })} />
                 <input type="checkbox" checked={s.activo !== false} onChange={(e) => updServ(s.codigo, { activo: e.target.checked })} />
+                <input className="pn-det" placeholder="Qué incluye (se muestra a la clienta)" value={s.detalle ?? ""} onChange={(e) => updServ(s.codigo, { detalle: e.target.value })} />
               </div>
             ))}
           </div>
@@ -91,6 +92,7 @@ export default function Contenido() {
             <label className="ancho">Título (primera línea)<input value={aj.hero.titulo1} onChange={(e) => upd({ hero: { ...aj.hero, titulo1: e.target.value } })} /></label>
             <label className="ancho">Título en cursiva (segunda línea)<input value={aj.hero.titulo2} onChange={(e) => upd({ hero: { ...aj.hero, titulo2: e.target.value } })} /></label>
             <label className="ancho">Texto debajo del título<textarea rows={3} value={aj.hero.bajada} onChange={(e) => upd({ hero: { ...aj.hero, bajada: e.target.value } })} /></label>
+            <label className="ancho">Frase sobre la foto<input value={aj.hero.nota} onChange={(e) => upd({ hero: { ...aj.hero, nota: e.target.value } })} /></label>
           </div>
         </>}
 

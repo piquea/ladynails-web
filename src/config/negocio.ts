@@ -51,16 +51,18 @@ export const METODOS_PAGO: MetodoPago[] = [
 ];
 
 export const POLITICAS = [
-  "Tu cita queda confirmada cuando validamos tu abono y te lo confirmamos por WhatsApp.",
+  "Tu cita queda confirmada cuando validamos tu abono y te enviamos una confirmación de servicio por WhatsApp.",
   "El abono de S/ 30 se descuenta del total de tu servicio; el saldo lo pagas en el studio al terminar.",
-  "Para reprogramar, avísanos con al menos 1 día de anticipación y tu abono pasa a la nueva cita.",
+  "Para reprogramar, avísanos con al menos 1 día de anticipación y tu abono pasa a la nueva cita (sujeto a disponibilidad de nuestra agenda).",
   "Si no asistes o cancelas con menos de 1 día de anticipación, el abono no es reembolsable.",
-  "Te esperamos hasta 15 minutos después de la hora reservada.",
+  "Te esperamos hasta 15 minutos después de la hora reservada. Si llegas más tarde, podríamos ofrecerte un servicio más corto (color entero o francesa).",
   "Si quieres cambiar el diseño, avísanos con al menos 3 horas de anticipación.",
-];
+  "Si tienes alguna alergia, sensibilidad o lesión en las uñas o la piel, cuéntanoslo antes de empezar.",
+]
 
 export const HERO = {
   titulo1: "Perfect nails.",
   titulo2: "Every time.",
-  bajada: "Manicure y pedicure en Chacarilla con técnicas que cuidan tu uña natural, estándares claros y un espacio pensado para ti.",
+  bajada: "Un espacio dedicado al cuidado de tus uñas, con técnicas especializadas, atención personalizada y atención en cada detalle.",
+  nota: "Sin prisas. Sin sorpresas. Tu horario está separado solo para ti.",
 };

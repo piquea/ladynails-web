@@ -21,7 +21,7 @@ export default function Precios({ servicios }: { servicios: Servicio[] }) {
           <div key={s.codigo} className="fila-precio">
             <span>
               {s.nombre}
-              {s.incluye && <span className="inc">{s.incluye.join(" + ")}</span>}
+              {(s.detalle || s.incluye) && <span className="inc">{s.detalle ?? s.incluye!.join(" + ")}</span>}
             </span>
             <span className="dur">{duracionTexto(s.duracion)}</span>
             <span className="pr">{enOferta(s) && <s className="antes">{soles(s.precioAntes!)}</s>}{s.precio ? soles(s.precio) : "Incluido"}</span>

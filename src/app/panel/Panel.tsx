@@ -10,7 +10,9 @@ import Contenido from "./Contenido";
 type Reserva = {
   id: number; codigo: string; estado: string; cliente_nombre: string; cliente_celular: string; cliente_email: string | null;
   primera_vez: boolean; fecha: string; hora_inicio: string; hora_fin: string; duracion_min: number;
-  items: { nombre: string; grupo: string; precio: number }[]; total: number; abono: number; saldo: number;
+  items: { nombre: string; grupo: string; precio: number; etiqueta?: string }[];
+  foto_manos: string | null; foto_referencia: string | null;
+  detalle: { sistema: string | null; hecho_en: string | null; accion: string | null; diseno: string } | null; total: number; abono: number; saldo: number;
   metodo_pago: string; constancia: string | null; notas: string | null; creado_en: string; pagado_en: string | null; mp_pago_id: string | null;
 };
 type Bloqueo = { id: number; fecha: string; hora_inicio: string | null; hora_fin: string | null; cupos: number; motivo: string | null };
@@ -140,7 +142,9 @@ function Reservas() {
               <div className="pn-info">
                 <p className="pn-nom">{r.cliente_nombre} {r.primera_vez && <span className="tag">1.ª vez</span>} <span className={`est ${ESTADO[r.estado]?.c}`}>{ESTADO[r.estado]?.t ?? r.estado}</span></p>
                 <p><a href={`https://wa.me/${r.cliente_celular.replace(/\D/g, "").replace(/^9/, "519")}`} target="_blank" rel="noopener">📱 {r.cliente_celular}</a>{r.cliente_email && <> · {r.cliente_email}</>} · {r.codigo}</p>
-                <p>{r.items.map((i) => `${GRUPO[i.grupo] ? GRUPO[i.grupo] + " " : ""}${i.nombre}`).join(" + ")}</p>
+                <p>{r.items.filter((i) => i.grupo !== "diseno" || i.precio).map((i) => `${i.etiqueta ?? GRUPO[i.grupo] ?? ""} ${i.nombre}`.trim()).join(" + ")}</p>
+                {r.detalle?.sistema && <p className="pn-notas">Tiene {r.detalle.sistema} ({r.detalle.hecho_en}) · {r.detalle.accion === "retoque" ? "pide retoque" : "pide retiro"}</p>}
+                {r.detalle && <p className="pn-notas">Diseño: {r.detalle.diseno}</p>}
                 {r.notas && <p className="pn-notas">“{r.notas}”</p>}
               </div>
               <div className="pn-montos">
@@ -150,6 +154,8 @@ function Reservas() {
               </div>
               <div className="pn-btns">
                 {r.constancia && <a className="btn btn-claro btn-chico" href={`/api/panel/constancia?id=${r.id}`} target="_blank">Ver constancia</a>}
+                {r.foto_manos && <a className="btn btn-claro btn-chico" href={`/api/panel/constancia?id=${r.id}&tipo=manos`} target="_blank">✋ Foto manos</a>}
+                {r.foto_referencia && <a className="btn btn-claro btn-chico" href={`/api/panel/constancia?id=${r.id}&tipo=referencia`} target="_blank">🎨 Referencia</a>}
                 {r.estado === "por_validar" && <button className="btn btn-oscuro btn-chico" onClick={() => cambiar(r, "confirmada")}>Confirmar abono</button>}
                 {r.estado === "confirmada" && (
                   <>

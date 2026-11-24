@@ -53,9 +53,9 @@ export default async function Inicio() {
           </div>
         </div>
         <div className="hero-foto sube">
-          <img src="/fotos/hero-vino.webp" alt="Clienta mostrando su manicure color vino en Lady Nails Studio" fetchPriority="high" />
+          <img src="/fotos/portada-hd.webp" alt="Clienta mostrando su manicure color vino en Lady Nails Studio" fetchPriority="high" />
           <img className="hero-emblema" src="/marca/emblema-crema.png" alt="" width={300} height={251} />
-          <p className="hero-nota">Reserva en línea en minutos y separa tu hora con un abono de {soles(aj.abono.monto)}. El resto, lo pagas en el studio.</p>
+          <p className="hero-nota">{aj.hero.nota}</p>
         </div>
       </section>
 
@@ -147,7 +147,7 @@ export default async function Inicio() {
             </div>
             <div className="plan plan-2">
               <span className="sello">Mani + Pedi</span>
-              <span className="nom">ManiPedi Gel</span>
+              <span className="nom">Pack Glam &amp; Care</span>
               <span className="precio">{manipedi !== undefined ? soles(manipedi) : "—"}</span>
               <p className="txt">Manicure y pedicure con esmaltado gel en una sola visita.</p>
               <Link href="/reservar?s=PCK003" className="btn btn-oscuro btn-chico">Reservar</Link>

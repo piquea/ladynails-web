@@ -32,7 +32,8 @@
    "nombre": "Detox",
    "precio": 45.0,
    "duracion": 30,
-   "sub": "Tradicionales"
+   "sub": "Tradicionales",
+   "detalle": "Limpieza profunda de cutículas, pulido, hidratación y esmaltado transparente con acabado brillante o color nude."
   },
   {
    "codigo": "MNC002",
@@ -40,7 +41,8 @@
    "nombre": "Esmaltado tradicional",
    "precio": 50.0,
    "duracion": 45,
-   "sub": "Tradicionales"
+   "sub": "Tradicionales",
+   "detalle": "Incluye color entero o francesa."
   },
   {
    "codigo": "MNC003",
@@ -48,7 +50,8 @@
    "nombre": "Esmaltado gel",
    "precio": 65.0,
    "duracion": 60,
-   "sub": "Gel"
+   "sub": "Gel",
+   "detalle": "Incluye color entero, francesa o diseño básico."
   },
   {
    "codigo": "MNC004",
@@ -56,7 +59,8 @@
    "nombre": "Rubber gel",
    "precio": 85.0,
    "duracion": 60,
-   "sub": "Gel"
+   "sub": "Gel",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo natural hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC005",
@@ -64,7 +68,8 @@
    "nombre": "Polygel",
    "precio": 130.0,
    "duracion": 120,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo natural hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC006",
@@ -72,7 +77,8 @@
    "nombre": "Polygel con tips",
    "precio": 150.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC007",
@@ -80,7 +86,8 @@
    "nombre": "Acrílicas con tips",
    "precio": 150.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC008",
@@ -88,7 +95,8 @@
    "nombre": "Builder gel",
    "precio": 150.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo natural hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC009",
@@ -96,7 +104,8 @@
    "nombre": "Builder gel con tips",
    "precio": 170.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC010",
@@ -104,7 +113,8 @@
    "nombre": "Esculpidas acrílicas",
    "precio": 190.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC011",
@@ -112,7 +122,8 @@
    "nombre": "Esculpidas polygel",
    "precio": 190.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC012",
@@ -120,7 +131,8 @@
    "nombre": "Esculpidas builder gel",
    "precio": 200.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Largo natural hasta el #3. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "MNC013",
@@ -128,63 +140,71 @@
    "nombre": "Soft gel",
    "precio": 150.0,
    "duracion": 120,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Alargamiento express con tips completos de gel. Incluye color entero, francesa o diseño básico. Precio para uñas libres de sistemas."
   },
   {
    "codigo": "RTQ001",
    "grupo": "retoque",
    "nombre": "Rubber gel",
-   "precio": 75.0,
+   "precio": 85.0,
    "duracion": 90,
-   "sub": "Gel"
+   "sub": "Gel",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ002",
    "grupo": "retoque",
    "nombre": "Polygel",
-   "precio": 100.0,
+   "precio": 130.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ003",
    "grupo": "retoque",
    "nombre": "Acrílicas",
-   "precio": 100.0,
+   "precio": 150.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ004",
    "grupo": "retoque",
    "nombre": "Builder gel",
-   "precio": 120.0,
+   "precio": 150.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ005",
    "grupo": "retoque",
    "nombre": "Esculpidas acrílicas",
-   "precio": 140.0,
+   "precio": 190.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ006",
    "grupo": "retoque",
    "nombre": "Esculpidas polygel",
-   "precio": 140.0,
+   "precio": 190.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTQ007",
    "grupo": "retoque",
    "nombre": "Esculpidas builder gel",
-   "precio": 150.0,
+   "precio": 200.0,
    "duracion": 150,
-   "sub": "Extensiones"
+   "sub": "Extensiones",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico. Solo para mantenimiento de uñas con sistema previo (no incluye alargamiento)."
   },
   {
    "codigo": "RTR001",
@@ -192,7 +212,8 @@
    "nombre": "Esmaltado gel",
    "precio": 20.0,
    "duracion": 15,
-   "sub": "Otro studio"
+   "sub": "Otro studio",
+   "detalle": "Retiro seguro del gel, limado suave y cuidado básico de la uña."
   },
   {
    "codigo": "RTR002",
@@ -200,7 +221,8 @@
    "nombre": "Rubber gel",
    "precio": 25.0,
    "duracion": 30,
-   "sub": "Otro studio"
+   "sub": "Otro studio",
+   "detalle": "Retiro del producto, limado, limpieza de cutículas y nutrición con aceite."
   },
   {
    "codigo": "RTR003",
@@ -208,7 +230,8 @@
    "nombre": "Polygel",
    "precio": 40.0,
    "duracion": 30,
-   "sub": "Otro studio"
+   "sub": "Otro studio",
+   "detalle": "Rebaje del producto, retiro cuidadoso, limado y pulido, limpieza de cutículas y nutrición con aceite."
   },
   {
    "codigo": "RTR004",
@@ -216,7 +239,8 @@
    "nombre": "Acrílicas",
    "precio": 40.0,
    "duracion": 30,
-   "sub": "Otro studio"
+   "sub": "Otro studio",
+   "detalle": "Rebaje del producto, retiro cuidadoso, limado y pulido, limpieza de cutículas y nutrición con aceite."
   },
   {
    "codigo": "RTR005",
@@ -224,7 +248,8 @@
    "nombre": "Builder gel",
    "precio": 50.0,
    "duracion": 30,
-   "sub": "Otro studio"
+   "sub": "Otro studio",
+   "detalle": "Rebaje del producto, retiro cuidadoso, limado y pulido, limpieza de cutículas y nutrición con aceite."
   },
   {
    "codigo": "DSN001",
@@ -232,7 +257,8 @@
    "nombre": "Clásico",
    "precio": 0.0,
    "duracion": 10,
-   "sub": "Diseño"
+   "sub": "Diseño",
+   "detalle": "Color entero, francesa, efecto aurora, glazed o diseño básico. Sin costo adicional."
   },
   {
    "codigo": "DSN002",
@@ -240,7 +266,8 @@
    "nombre": "Signature",
    "precio": 15.0,
    "duracion": 20,
-   "sub": "Diseño"
+   "sub": "Diseño",
+   "detalle": "Arte a mano alzada sencillo en algunas uñas: líneas, puntos, flores pequeñas, cromados o detalles dorados."
   },
   {
    "codigo": "DSN003",
@@ -248,7 +275,8 @@
    "nombre": "Premium",
    "precio": 25.0,
    "duracion": 30,
-   "sub": "Diseño"
+   "sub": "Diseño",
+   "detalle": "Diseño elaborado en todas las uñas: 3D, pedrería, airbrush, pintura detallada o diseños personalizados."
   },
   {
    "codigo": "PDC001",
@@ -256,7 +284,8 @@
    "nombre": "Detox",
    "precio": 45.0,
    "duracion": 35,
-   "sub": "Tradicionales"
+   "sub": "Tradicionales",
+   "detalle": "Limpieza profunda, hidratación y esmaltado transparente con acabado brillante o color nude."
   },
   {
    "codigo": "PDC002",
@@ -264,7 +293,8 @@
    "nombre": "Esmaltado tradicional",
    "precio": 50.0,
    "duracion": 45,
-   "sub": "Tradicionales"
+   "sub": "Tradicionales",
+   "detalle": "Incluye color entero o francesa."
   },
   {
    "codigo": "PDC003",
@@ -272,7 +302,8 @@
    "nombre": "Esmaltado gel",
    "precio": 65.0,
    "duracion": 60,
-   "sub": "Gel"
+   "sub": "Gel",
+   "detalle": "Incluye color entero, francesa o diseño básico."
   },
   {
    "codigo": "PDC004",
@@ -280,55 +311,64 @@
    "nombre": "Rubber gel",
    "precio": 85.0,
    "duracion": 70,
-   "sub": "Gel"
+   "sub": "Gel",
+   "detalle": "Incluye color entero, francesa, efecto aurora, glazed o diseño básico."
   },
   {
    "codigo": "PCK001",
    "grupo": "manipedi",
-   "nombre": "ManiPedi Detox",
+   "nombre": "Pack Glow",
    "precio": 85.0,
    "duracion": 60,
    "sub": "Tradicionales",
    "incluye": [
     "Manicure Detox",
     "Pedicure Detox"
-   ]
+   ],
+   "detalle": "Manicure + pedicure detox: limpieza profunda, hidratación y esmaltado transparente o nude.",
+   "precioAntes": 90.0
   },
   {
    "codigo": "PCK002",
    "grupo": "manipedi",
-   "nombre": "ManiPedi Tradicional",
+   "nombre": "Pack Uñas Bonitas",
    "precio": 95.0,
    "duracion": 90,
    "sub": "Tradicionales",
    "incluye": [
     "Manicure Esmaltado tradicional",
     "Pedicure Esmaltado tradicional"
-   ]
+   ],
+   "detalle": "Manicure + pedicure con esmaltado tradicional: color entero o francesa.",
+   "precioAntes": 100.0
   },
   {
    "codigo": "PCK003",
    "grupo": "manipedi",
-   "nombre": "ManiPedi Gel",
+   "nombre": "Pack Glam & Care",
    "precio": 110.0,
    "duracion": 120,
    "sub": "Gel",
    "incluye": [
     "Manicure Esmaltado gel",
     "Pedicure Esmaltado gel"
-   ]
+   ],
+   "detalle": "Manicure + pedicure con esmaltado en gel: color entero, francesa o diseño básico.",
+   "precioAntes": 130.0
   },
   {
    "codigo": "PCK004",
    "grupo": "manipedi",
-   "nombre": "ManiPedi Rubber gel",
+   "nombre": "Pack Rubber Nails",
    "precio": 130.0,
    "duracion": 130,
    "sub": "Gel",
    "incluye": [
     "Manicure Rubber gel",
     "Pedicure Rubber gel"
-   ]
+   ],
+   "detalle": "Manicure + pedicure con Rubber Gel: color entero, francesa, efecto aurora, glazed o diseño básico. Largo natural hasta el #3. Precio para uñas libres de sistemas.",
+   "precioAntes": 170.0
   }
  ]
 }

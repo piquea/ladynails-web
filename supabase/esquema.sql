@@ -92,3 +92,9 @@ alter table reservas add column if not exists pagado_en timestamptz;
 create index if not exists reservas_codigo on reservas (codigo);
 alter table reclamaciones add column if not exists correo_enviado_en timestamptz;
 alter table reclamaciones add column if not exists respuesta_enviada_en timestamptz;
+
+-- ---------- Reserva por pasos (24/11/2026) ----------
+alter table reservas add column if not exists foto_manos text;       -- estado actual de las uñas (opcional)
+alter table reservas add column if not exists foto_referencia text;  -- referencia de diseño (opcional)
+alter table reservas add column if not exists detalle jsonb;         -- sistema actual, dónde se hizo, retoque/retiro, diseño
+update storage.buckets set file_size_limit = 8388608 where id = 'constancias';

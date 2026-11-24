@@ -87,12 +87,13 @@ export function normalizar(entrada: unknown): Ajustes {
       duracion: Math.round(num(o.duracion, 0, 600, 60)),
       activo: o.activo !== false,
       ...(incluye?.length ? { incluye } : {}),
+      ...(txt(o.detalle, 400) ? { detalle: txt(o.detalle, 400) } : {}),
     }];
   });
 
   return {
     negocio,
-    hero: { titulo1: txt(h.titulo1, 60) || B.hero.titulo1, titulo2: txt(h.titulo2, 60), bajada: txt(h.bajada, 300) || B.hero.bajada },
+    hero: { titulo1: txt(h.titulo1, 60) || B.hero.titulo1, titulo2: txt(h.titulo2, 60), bajada: txt(h.bajada, 300) || B.hero.bajada, nota: txt(h.nota, 200) || B.hero.nota },
     horario,
     agenda: {
       manicuristas: Math.round(num(g.manicuristas, 1, 20, B.agenda.manicuristas)),
