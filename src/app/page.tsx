@@ -16,7 +16,7 @@ const PILARES = [
 ];
 
 const PREGUNTAS = [
-  { p: "¿Cómo reservo mi cita?", r: `Elige tus servicios, la fecha y una hora disponible. Paga el abono (${ABONO.porcentaje}% del total) por Yape, Plin o transferencia y sube tu constancia. Te escribimos por WhatsApp para confirmar.` },
+  { p: "¿Cómo reservo mi cita?", r: `Elige tus servicios, la fecha y una hora disponible. Paga el abono (${ABONO.porcentaje}% del total) por Yape o transferencia (BCP o BBVA) y sube tu constancia. Te escribimos por WhatsApp para confirmar.` },
   { p: "¿Por qué piden un abono?", r: "Separa la hora de tu manicurista solo para ti. El abono se descuenta de tu servicio y el saldo lo pagas en el studio." },
   { p: "¿Qué sistema me conviene?", r: "Si quieres mantener tu uña natural: Rubber Gel o Builder Gel (más estructura). Si buscas largo: Polygel, Acrílicas o Soft Gel. Toca cada sistema arriba para ver para quién es ideal, o escríbenos y te ayudamos a elegir." },
   { p: "Tengo un trabajo de otro studio, ¿lo pueden retirar?", r: "Sí. Agrega el retiro a tu reserva en la pestaña «Retiro de otro studio» para que separemos el tiempo necesario." },
@@ -33,40 +33,42 @@ export default function Inicio() {
       {/* HERO */}
       <section className="contenedor hero">
         <div className="hero-texto">
-          <p className="eyebrow sube">Perfect nails. Every time. · Lady Nails Studio</p>
-          <h1 className="titulo-xl sube sube-2">
-            Uñas impecables.<br />
-            Un momento <span className="it">solo tuyo.</span>
+          <h1 className="titulo-hero sube">
+            Perfect nails.<br />
+            <span className="it">Every time.</span>
           </h1>
+          <p className="hero-bajada sube sube-2">
+            Manicure y pedicure en Chacarilla con técnicas que cuidan tu uña natural, estándares claros y un espacio pensado para ti.
+          </p>
           <div className="fila sube sube-3">
             <Link href="/reservar" className="btn btn-oscuro">Reservar mi cita</Link>
             <a href="#sistemas" className="btn btn-borde">Ver sistemas</a>
           </div>
-          <div className="hero-datos sube sube-3">
-            <div><b>5 sistemas</b>para cada tipo de uña</div>
-            <div><b>Reserva en línea</b>con abono del {ABONO.porcentaje}%</div>
-            <div><b>Chacarilla</b>frente a Sodimac</div>
-          </div>
         </div>
         <div className="hero-foto sube">
           <img src="/fotos/hero-vino.webp" alt="Clienta mostrando su manicure color vino en Lady Nails Studio" fetchPriority="high" />
-          <div className="hero-mini"><img src="/fotos/cateye-rosa.webp" alt="" /></div>
-          <p className="hero-nota">
-            Manicure y pedicure con técnicas que cuidan tu uña natural, en un espacio cercano y hecho para ti — sin apuro, con estándares claros.
-          </p>
+          <img className="hero-emblema" src="/marca/emblema-crema.png" alt="" width={300} height={251} />
+          <p className="hero-nota">Reserva en línea en minutos y separa tu hora con un abono del {ABONO.porcentaje}%. El resto, lo pagas en el studio.</p>
         </div>
       </section>
+
+      {/* FRANJA */}
+      <div className="franja" aria-label="Nuestros sistemas">
+        {["Rubber Gel", "Builder Gel", "Soft Gel", "PolyGel", "Acrílicas", "Pedicure", "Nail Art"].map((t) => (
+          <span key={t}>{t}<img src="/marca/emblema-crema.png" alt="" width={300} height={251} /></span>
+        ))}
+      </div>
 
       {/* SISTEMAS */}
       <div className="lamina" id="sistemas">
         <div className="contenedor">
           <div className="cabecera">
-            <p className="eyebrow">Cinco técnicas, una misma forma de trabajar.</p>
+            <p className="marca-eyebrow"><img src="/marca/emblema-vino.png" alt="" width={300} height={251} />Sistemas</p>
             <div className="centro">
               <h2 className="titulo-l">Encuentra <span className="suave">tu</span> sistema</h2>
               <p className="sub-l">Cada uña es distinta. <span className="suave">Por eso no hay una sola técnica.</span></p>
             </div>
-            <span />
+            <p className="eyebrow der">Cinco técnicas, una misma<br />forma de trabajar.</p>
           </div>
           <Sistemas />
         </div>
@@ -76,7 +78,7 @@ export default function Inicio() {
           <div className="panel">
             <div className="panel-cab">
               <div>
-                <p className="eyebrow">Más que un salón.</p>
+                <p className="marca-eyebrow claro"><img src="/marca/emblema-crema.png" alt="" width={300} height={251} />Experiencia</p>
                 <h2 className="titulo-l" style={{ marginTop: 8 }}>
                   Lady Nails te <span className="it">recibe</span><br />— y cuida cada detalle.
                 </h2>
@@ -108,8 +110,8 @@ export default function Inicio() {
         <section className="contenedor seccion">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 20, flexWrap: "wrap", marginBottom: 32 }}>
             <div>
-              <h2 className="titulo-l">Cuatro <span className="pildora">pilares</span></h2>
-              <p className="sub-l" style={{ marginTop: 6 }}>Lo que nos define</p>
+              <p className="marca-eyebrow"><img src="/marca/emblema-vino.png" alt="" width={300} height={251} />Lo que nos define</p>
+              <h2 className="titulo-l">Cuatro <span className="it">pilares</span></h2>
             </div>
             <p className="chica" style={{ textAlign: "right" }}>Una forma definida de trabajar, en cada cita.</p>
           </div>
@@ -126,8 +128,9 @@ export default function Inicio() {
 
         {/* PRECIOS */}
         <section className="contenedor seccion" id="precios">
-          <h2 className="titulo-l">Precios</h2>
-          <p className="sub-l" style={{ marginTop: 6, marginBottom: 32 }}>Claros desde el inicio.</p>
+          <p className="marca-eyebrow"><img src="/marca/emblema-vino.png" alt="" width={300} height={251} />Precios</p>
+          <h2 className="titulo-l">Claros desde <span className="it">el inicio.</span></h2>
+          <div style={{ height: 36 }} />
           <div className="planes">
             <div className="plan plan-1">
               <span className="nom">Manicure gel</span>
@@ -154,8 +157,8 @@ export default function Inicio() {
 
         {/* PREGUNTAS */}
         <section className="contenedor seccion" id="preguntas">
-          <h2 className="titulo-l">Preguntas</h2>
-          <p className="sub-l" style={{ marginTop: 6, marginBottom: 28 }}>Las que más nos hacen.</p>
+          <p className="marca-eyebrow"><img src="/marca/emblema-vino.png" alt="" width={300} height={251} />Preguntas</p>
+          <h2 className="titulo-l" style={{ marginBottom: 32 }}>Las que más <span className="it">nos hacen.</span></h2>
           <div className="faq">
             {PREGUNTAS.map((q, i) => (
               <details key={q.p} open={i === 0}>

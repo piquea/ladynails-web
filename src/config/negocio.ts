@@ -1,6 +1,5 @@
 // =============================================================
 //  CONFIGURACIÓN DE LADY NAILS STUDIO — edita aquí sin tocar el resto del código
-//  ⚠️ Lo marcado con COMPLETAR hay que reemplazarlo por el dato real.
 // =============================================================
 
 export const NEGOCIO = {
@@ -13,23 +12,25 @@ export const NEGOCIO = {
   direccion: "Av. Caminos del Inca 131, Edificio G, Of. 305 – Santiago de Surco",
   referencia: "Frente a Sodimac de Chacarilla",
   mapa: "https://maps.app.goo.gl/ESKcQhzTEU9gW47G8",
+  razonSocial: "BEAUTY CORP PERU S.A.C.",
+  ruc: "20615935396",
 };
 
 // ---------- HORARIO DE ATENCIÓN ----------
 // 0 = domingo … 6 = sábado. null = cerrado. La última cita debe terminar antes del cierre.
 export const HORARIO: Record<number, { abre: string; cierra: string } | null> = {
-  0: null, // COMPLETAR si atienden domingos, ej. { abre: "10:00", cierra: "17:00" }
-  1: { abre: "09:00", cierra: "20:00" },
-  2: { abre: "09:00", cierra: "20:00" },
-  3: { abre: "09:00", cierra: "20:00" },
-  4: { abre: "09:00", cierra: "20:00" },
-  5: { abre: "09:00", cierra: "20:00" },
-  6: { abre: "09:00", cierra: "20:00" },
+  0: { abre: "10:00", cierra: "16:00" }, // domingo
+  1: { abre: "10:00", cierra: "19:00" },
+  2: { abre: "10:00", cierra: "19:00" },
+  3: { abre: "10:00", cierra: "19:00" },
+  4: { abre: "10:00", cierra: "19:00" },
+  5: { abre: "10:00", cierra: "19:00" },
+  6: { abre: "10:00", cierra: "19:00" }, // sábado
 };
 
 export const HORARIO_TEXTO = [
-  { dias: "Lunes a sábado", horas: "9:00 a. m. – 8:00 p. m." },
-  { dias: "Domingos", horas: "Cerrado" },
+  { dias: "Lunes a sábado", horas: "10:00 a. m. – 7:00 p. m." },
+  { dias: "Domingos", horas: "10:00 a. m. – 4:00 p. m." },
 ];
 
 export const AGENDA = {
@@ -46,18 +47,15 @@ export const ABONO = { porcentaje: 50, minimo: 30 };
 
 export const METODOS_PAGO = [
   { id: "yape", nombre: "Yape" },
-  { id: "plin", nombre: "Plin" },
-  { id: "transferencia", nombre: "Transferencia" },
+  { id: "bcp", nombre: "BCP" },
+  { id: "bbva", nombre: "BBVA" },
 ] as const;
 
 // Cuenta de RECAUDACIÓN (donde pagan las clientas)
 export const DATOS_PAGO: Record<string, { titulo: string; lineas: string[] }[]> = {
-  yape: [{ titulo: "Yape a nombre de LADY NAILS STUDIO", lineas: ["900 000 000"] }], // COMPLETAR
-  plin: [{ titulo: "Plin a nombre de LADY NAILS STUDIO", lineas: ["900 000 000"] }], // COMPLETAR
-  transferencia: [
-    { titulo: "BCP · cuenta de recaudación", lineas: ["000-0000000-0-00"] }, // COMPLETAR
-    { titulo: "CCI", lineas: ["002-000-000000000000-00"] }, // COMPLETAR
-  ],
+  yape: [{ titulo: "Yape · BEAUTY CORP PERU S.A.C.", lineas: ["946 441 428"] }],
+  bcp: [{ titulo: "BCP · Cuenta recaudación Lady Nails", lineas: ["1937387090069"] }],
+  bbva: [{ titulo: "BBVA · Cuenta recaudación Lady Nails", lineas: ["0011-0138-0200558678"] }],
 };
 
 export const POLITICAS = [

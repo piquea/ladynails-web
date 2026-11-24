@@ -22,7 +22,7 @@ create table if not exists reservas (
   total            numeric(10,2) not null,
   abono            numeric(10,2) not null,
   saldo            numeric(10,2) not null,
-  metodo_pago      text not null,                   -- yape | plin | transferencia
+  metodo_pago      text not null,                   -- yape | bcp | bbva
   constancia       text,                            -- ruta en el bucket privado "constancias"
   notas            text,
   acepto_politicas_en timestamptz not null default now()

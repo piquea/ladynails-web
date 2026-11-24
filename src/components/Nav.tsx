@@ -12,7 +12,10 @@ export default function Nav({ simple = false }: { simple?: boolean }) {
       <div className="nav-barra">
         <Link href="/" aria-label="Lady Nails Studio — inicio">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/marca/logo-crema.png" alt="Lady Nails" width={900} height={226} />
+          <span className="nav-logo">
+            <img src="/marca/emblema-crema.png" alt="" width={300} height={251} className="emb" />
+            <img src="/marca/logo-crema.png" alt="Lady Nails" width={900} height={226} />
+          </span>
         </Link>
         <nav className="nav-links" onClick={() => setAbierta(false)}>
           <a href={ir("#sistemas")}>Sistemas</a>
