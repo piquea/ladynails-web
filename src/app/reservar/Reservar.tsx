@@ -4,15 +4,15 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Ajustes } from "@/lib/ajustes";
-import { GRUPOS, GRUPOS_EXTRA, activos, buscar, calcularReserva, duracionTexto, soles } from "@/lib/catalogo";
+import { GRUPOS, GRUPOS_EXTRA, activos, buscar, calcularReserva, duracionTexto, enOferta, soles } from "@/lib/catalogo";
 import { ahoraLima, diaAbierto, fechaLarga, hora12, sumarDias } from "@/lib/agenda";
 
 const PASOS = ["Servicios", "Fecha y hora", "Tus datos", "Abono"];
 type Listo = { codigo: string; whatsapp: string; guardado: boolean };
 
-type Props = Pick<Ajustes, "servicios" | "horario" | "agenda" | "abono" | "metodosPago" | "politicas"> & { whatsapp: string; direccion: string };
+type Props = Pick<Ajustes, "servicios" | "horario" | "agenda" | "abono" | "metodosPago" | "politicas"> & { whatsapp: string; direccion: string; tarjeta: { disponible: boolean; cobrar: "abono" | "total" } };
 
-export default function Reservar({ servicios: todos, horario, agenda: AGENDA, abono, metodosPago: METODOS_PAGO, politicas: POLITICAS, direccion }: Props) {
+export default function Reservar({ servicios: todos, horario, agenda: AGENDA, abono, metodosPago: METODOS_PAGO, politicas: POLITICAS, direccion, tarjeta }: Props) {
   const SERVICIOS = useMemo(() => activos(todos), [todos]);
   const porCodigo = (c: string) => buscar(SERVICIOS, c);
   const sp = useSearchParams();
@@ -37,6 +37,8 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
   const [recarga, setRecarga] = useState(0);
 
   const r = useMemo(() => calcularReserva(sel, todos, abono.monto), [sel, todos, abono.monto]);
+  const cobroTarjeta = tarjeta.cobrar === "total" ? r.total : r.abono;
+  useEffect(() => { if (r.conDescuento && pago === "tarjeta") setPago(METODOS_PAGO[0]?.id ?? ""); }, [r.conDescuento, pago, METODOS_PAGO]);
 
   // Se calcula en el navegador (la página se genera una vez y "hoy" cambia cada día)
   const [dias, setDias] = useState<string[]>([]);
@@ -83,7 +85,7 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
     r.tienePrincipal,
     !!fecha && !!hora,
     cliente.nombre.trim().length >= 2 && celularOk,
-    acepto && !!archivo,
+    acepto && (pago === "tarjeta" || !!archivo),
   ];
 
   async function confirmar() {
@@ -100,6 +102,7 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
         if (res.status === 409) { setPaso(1); setHora(""); setRecarga((n) => n + 1); }
         return;
       }
+      if (j.pagar) { location.href = j.pagar; return; }
       setListo(j);
     } catch {
       setError("Se perdió la conexión. Revisa tu internet e intenta de nuevo.");
@@ -164,7 +167,7 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
                     <span className="check">{on ? "✓" : ""}</span>
                     <span className="nom">{s.nombre}{s.incluye && <small>{s.incluye.join(" + ")}</small>}</span>
                     <span className="meta">{duracionTexto(s.duracion)}</span>
-                    <span className="pr">{s.precio ? soles(s.precio) : "Incluido"}</span>
+                    <span className="pr">{enOferta(s) && <s className="antes">{soles(s.precioAntes!)}</s>}{s.precio ? soles(s.precio) : "Incluido"}</span>
                   </button>
                 );
               })}
@@ -226,12 +229,17 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
         {paso === 3 && (
           <section>
             <h1 className="titulo-m">Separa tu hora con un <span className="it">abono</span></h1>
-            <p className="ayuda">Paga el abono de {soles(r.abono)} y sube tu constancia. El saldo de {soles(r.saldo)} lo pagas en el studio.</p>
+            <p className="ayuda">{pago === "tarjeta" ? `Pagas ${soles(cobroTarjeta)} con tarjeta en Mercado Pago y tu cita queda confirmada al instante.${r.total - cobroTarjeta > 0 ? ` El saldo de ${soles(r.total - cobroTarjeta)} lo pagas en el studio.` : ""}` : `Paga el abono de ${soles(r.abono)} y sube tu constancia. El saldo de ${soles(r.saldo)} lo pagas en el studio.`}</p>
             <div className="pestanas" style={{ marginTop: 20 }}>
               {METODOS_PAGO.map((m) => (
                 <button key={m.id} className={`pestana ${pago === m.id ? "activa" : ""}`} onClick={() => setPago(m.id)}>{m.nombre}</button>
               ))}
+              {tarjeta.disponible && (
+                <button className={`pestana ${pago === "tarjeta" ? "activa" : ""}`} disabled={r.conDescuento} title={r.conDescuento ? "Solo para servicios a precio de catálogo" : undefined}
+                  onClick={() => setPago("tarjeta")} style={r.conDescuento ? { opacity: .45, cursor: "not-allowed" } : undefined}>💳 Tarjeta</button>
+              )}
             </div>
+            {tarjeta.disponible && r.conDescuento && <p className="ayuda" style={{ marginTop: 8 }}>El pago con tarjeta es solo para servicios a precio de catálogo (sin descuento).</p>}
             <div className="datos-pago">
               {METODOS_PAGO.filter((m) => m.id === pago).map((b) => (
                 <div key={b.id}>
@@ -242,11 +250,17 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
                 </div>
               ))}
             </div>
-            <label className={`subir ${archivo ? "on" : ""}`}>
+            {pago === "tarjeta" && (
+              <div className="datos-pago"><div>
+                <span className="etq">Tarjeta de crédito o débito · Mercado Pago</span>
+                <p style={{ fontSize: 15 }}>Al confirmar te llevamos a Mercado Pago para pagar {soles(cobroTarjeta)} de forma segura. La hora queda separada por 30 minutos.</p>
+              </div></div>
+            )}
+            {pago !== "tarjeta" && <label className={`subir ${archivo ? "on" : ""}`}>
               <input type="file" accept="image/*,application/pdf" onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} hidden />
               <b>{archivo ? `📎 ${archivo.name}` : "Subir constancia de pago *"}</b>
               <span>{archivo ? "Toca para cambiarla" : "Captura de pantalla o PDF, hasta 5 MB"}</span>
-            </label>
+            </label>}
             <div className="politicas">
               {POLITICAS.map((p) => <p key={p}>{p}</p>)}
             </div>
@@ -264,7 +278,7 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
           {paso < 3 ? (
             <button className="btn btn-oscuro" disabled={!puede[paso]} onClick={() => setPaso(paso + 1)}>Continuar</button>
           ) : (
-            <button className="btn btn-oscuro" disabled={!puede[3] || enviando} onClick={confirmar}>{enviando ? "Enviando…" : "Confirmar reserva"}</button>
+            <button className="btn btn-oscuro" disabled={!puede[3] || enviando} onClick={confirmar}>{enviando ? "Enviando…" : pago === "tarjeta" ? `Pagar ${soles(cobroTarjeta)} con tarjeta` : "Confirmar reserva"}</button>
           )}
         </div>
       </div>
@@ -283,8 +297,8 @@ export default function Reservar({ servicios: todos, horario, agenda: AGENDA, ab
         {r.items.length > 0 && (
           <div className="res-total">
             <p><span>Total</span><span>{soles(r.total)}</span></p>
-            <p className="abono"><span>Abono para reservar</span><span>{soles(r.abono)}</span></p>
-            <p><span>Saldo en el studio</span><span>{soles(r.saldo)}</span></p>
+            <p className="abono"><span>{pago === "tarjeta" && cobroTarjeta === r.total ? "Pago con tarjeta" : "Abono para reservar"}</span><span>{soles(pago === "tarjeta" ? cobroTarjeta : r.abono)}</span></p>
+            <p><span>Saldo en el studio</span><span>{soles(pago === "tarjeta" ? r.total - cobroTarjeta : r.saldo)}</span></p>
           </div>
         )}
       </aside>

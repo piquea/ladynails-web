@@ -65,17 +65,18 @@ export default function Contenido() {
       <div className="pn-card">
         {sec === "servicios" && <>
           <h2>Servicios y precios</h2>
-          <p className="ayuda">Los códigos son los mismos del punto de venta. Desactiva un servicio para ocultarlo en la web sin borrarlo.</p>
+          <p className="ayuda">Los códigos son los mismos del punto de venta. Desactiva un servicio para ocultarlo en la web sin borrarlo. Para una oferta, pon el precio rebajado en «Precio S/» y el original en «Precio normal»: se muestra tachado y no se puede pagar con tarjeta.</p>
           <div className="pestanas" style={{ marginTop: 16 }}>
             {GRUPOS.map((g) => <button key={g.id} className={`pestana ${grupo === g.id ? "activa" : ""}`} onClick={() => setGrupo(g.id)}>{g.nombre}</button>)}
           </div>
           <div className="pn-tabla">
-            <div className="pn-tr pn-th"><span>Código</span><span>Nombre</span><span>Precio S/</span><span>Minutos</span><span>Activo</span></div>
+            <div className="pn-tr pn-th"><span>Código</span><span>Nombre</span><span>Precio S/</span><span title="Llénalo solo si hay oferta">Precio normal</span><span>Minutos</span><span>Activo</span></div>
             {aj.servicios.filter((s) => s.grupo === grupo).map((s) => (
               <div key={s.codigo} className={`pn-tr ${s.activo === false ? "off" : ""}`}>
                 <span className="cod">{s.codigo}</span>
                 <input value={s.nombre} onChange={(e) => updServ(s.codigo, { nombre: e.target.value })} />
                 <input type="number" min={0} step="0.5" value={s.precio} onChange={(e) => updServ(s.codigo, { precio: Number(e.target.value) })} />
+                <input type="number" min={0} step="0.5" placeholder="—" value={s.precioAntes ?? ""} onChange={(e) => updServ(s.codigo, { precioAntes: e.target.value ? Number(e.target.value) : undefined })} />
                 <input type="number" min={0} step={5} value={s.duracion} onChange={(e) => updServ(s.codigo, { duracion: Number(e.target.value) })} />
                 <input type="checkbox" checked={s.activo !== false} onChange={(e) => updServ(s.codigo, { activo: e.target.checked })} />
               </div>
@@ -129,7 +130,17 @@ export default function Contenido() {
           <div className="campos">
             <label>Monto del abono (S/)<input type="number" min={0} value={aj.abono.monto} onChange={(e) => upd({ abono: { monto: Number(e.target.value) } })} /></label>
           </div>
-          <h2 style={{ marginTop: 30 }}>Métodos de pago</h2>
+          <h2 style={{ marginTop: 30 }}>Tarjeta (Mercado Pago)</h2>
+          <p className="ayuda">Solo para servicios a precio de catálogo. Con tarjeta la cita se confirma sola al aprobarse el pago.</p>
+          <div className="campos">
+            <label className="acepto" style={{ marginTop: 0 }}><input type="checkbox" checked={aj.tarjeta.activo} onChange={(e) => upd({ tarjeta: { ...aj.tarjeta, activo: e.target.checked } })} /><span>Aceptar pagos con tarjeta</span></label>
+            <label>Con tarjeta se cobra
+              <select value={aj.tarjeta.cobrar} onChange={(e) => upd({ tarjeta: { ...aj.tarjeta, cobrar: e.target.value as "abono" | "total" } })}>
+                <option value="abono">Solo el abono</option><option value="total">El total del servicio</option>
+              </select>
+            </label>
+          </div>
+          <h2 style={{ marginTop: 30 }}>Yape y transferencias</h2>
           {aj.metodosPago.map((m, i) => {
             const set = (p: Partial<typeof m>) => upd({ metodosPago: aj.metodosPago.map((x, j) => (j === i ? { ...x, ...p } : x)) });
             return (

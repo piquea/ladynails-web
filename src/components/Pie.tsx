@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Ajustes } from "@/lib/ajustes";
 import { textoHorario } from "@/lib/agenda";
-import { soles } from "@/lib/catalogo";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -26,12 +25,14 @@ export default function Pie({ aj }: { aj: Ajustes }) {
             <img src="/marca/emblema-crema.png" alt="" width={300} height={251} className="emb" />
             <span className="titulo-pie">¡Hola, somos <span className="it">Lady Nails!</span></span>
           </div>
-          <p>Un studio de manicure y pedicure pensado por y para mujeres: técnicas que cuidan tu uña natural, estándares claros y una experiencia cercana.</p>
+          <p>Un espacio creado para que disfrutes el cuidado de tus manos y pies. En Lady Nails combinamos técnica, detalle y dedicación para realzar la belleza de tus uñas, respetando siempre su naturaleza y priorizando su cuidado.</p>
+          <p className="pie-sub">✨ Lo que nos hace especiales:</p>
           <ul>
-            <li>Reserva en línea y separa tu hora con un abono de {soles(aj.abono.monto)}.</li>
-            <li>Rubber, Builder gel, Soft gel, PolyGel y Acrílicas.</li>
-            <li>Nuestros precios incluyen IGV. Emitimos boleta o factura electrónica.</li>
-            <li>{N.direccion}. {N.referencia}.</li>
+            <li>Atención personalizada en cada servicio, porque cada detalle importa.</li>
+            <li>Técnicas especializadas que priorizan el cuidado de tu uña natural.</li>
+            <li>Manicure, pedicure, Rubber, Builder Gel, Soft Gel, PolyGel y Acrílicas.</li>
+            <li>Un ambiente acogedor donde cada visita se convierte en un momento para ti.</li>
+            <li>Reserva tu cita online y asegura tu horario con un abono de S/ {aj.abono.monto.toFixed(2)}.</li>
           </ul>
         </div>
 
@@ -48,12 +49,21 @@ export default function Pie({ aj }: { aj: Ajustes }) {
           </div>
         </div>
 
+        <div className="pie-mapa-col">
+          <p className="pie-titulo">Visítanos</p>
+          <a className="pie-mapa" href={N.mapa} target="_blank" rel="noopener" aria-label="Abrir la ubicación de Lady Nails en Google Maps">
+            <iframe title="Mapa de Lady Nails Studio" loading="lazy" tabIndex={-1} referrerPolicy="no-referrer-when-downgrade"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent("Av. Caminos del Inca 131, Santiago de Surco, Lima, Perú")}&z=16&output=embed`} />
+            <span className="pie-mapa-btn">Abrir en Google Maps ↗</span>
+          </a>
+          <p className="pie-dir">{N.direccion}<br />{N.referencia}</p>
+        </div>
+
         <div className="pie-links">
           <a href="/#sistemas">Sistemas</a>
           <a href="/#precios">Precios</a>
           <a href="/#preguntas">Preguntas frecuentes</a>
           <Link href="/reservar">Reservar cita</Link>
-          <a href={N.mapa} target="_blank" rel="noopener">Cómo llegar</a>
           <Link href="/terminos">Términos y condiciones</Link>
           <Link href="/libro-de-reclamaciones" className="btn-libro">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M3 5.5c2.5-1 5.5-1 9 1v13c-3.5-2-6.5-2-9-1v-13Zm18 0c-2.5-1-5.5-1-9 1v13c3.5-2 6.5-2 9-1v-13Z" /><path d="M5.5 9h4M5.5 12h4M14.5 9h4M14.5 12h4" /></svg>
@@ -62,8 +72,6 @@ export default function Pie({ aj }: { aj: Ajustes }) {
           <p className="ruc">{N.razonSocial} · RUC {N.ruc}</p>
         </div>
       </div>
-
-      <img className="pie-gigante" src="/marca/logo-crema.png" alt="" width={900} height={226} />
 
       <div className="contenedor pie-base">
         <span>© {new Date().getFullYear()} {N.razonSocial.replace(/\.$/, "")}. Todos los derechos reservados. Lady Nails Studio.</span>

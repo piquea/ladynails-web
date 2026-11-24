@@ -11,17 +11,19 @@ type Reserva = {
   id: number; codigo: string; estado: string; cliente_nombre: string; cliente_celular: string; cliente_email: string | null;
   primera_vez: boolean; fecha: string; hora_inicio: string; hora_fin: string; duracion_min: number;
   items: { nombre: string; grupo: string; precio: number }[]; total: number; abono: number; saldo: number;
-  metodo_pago: string; constancia: string | null; notas: string | null; creado_en: string;
+  metodo_pago: string; constancia: string | null; notas: string | null; creado_en: string; pagado_en: string | null; mp_pago_id: string | null;
 };
 type Bloqueo = { id: number; fecha: string; hora_inicio: string | null; hora_fin: string | null; cupos: number; motivo: string | null };
 type Reclamo = {
   id: number; codigo: string; creado_en: string; tipo: string; nombre: string; tipo_documento: string; numero_documento: string;
   domicilio: string; telefono: string; email: string; menor_de_edad: boolean; apoderado: string | null; bien_tipo: string;
   bien_descripcion: string; monto: number | null; detalle: string; pedido: string; estado: string; respuesta: string | null; respondido_en: string | null;
+  correo_enviado_en: string | null; respuesta_enviada_en: string | null;
 };
 
 const ESTADO: Record<string, { t: string; c: string }> = {
   por_validar: { t: "Por validar abono", c: "amarillo" },
+  pago_pendiente: { t: "Pago con tarjeta en curso", c: "gris" },
   confirmada: { t: "Confirmada", c: "verde" },
   atendida: { t: "Atendida", c: "gris" },
   anulada: { t: "Anulada", c: "rojo" },
@@ -143,7 +145,7 @@ function Reservas() {
               </div>
               <div className="pn-montos">
                 <p>Total <b>{soles(Number(r.total))}</b></p>
-                <p>Abono ({r.metodo_pago}) <b>{soles(Number(r.abono))}</b></p>
+                <p>{r.metodo_pago === "tarjeta" ? (r.pagado_en ? "💳 Pagado con tarjeta" : "💳 Tarjeta sin pagar") : `Abono (${r.metodo_pago})`} <b>{soles(Number(r.abono))}</b></p>
                 <p>Saldo <b>{soles(Number(r.saldo))}</b></p>
               </div>
               <div className="pn-btns">
@@ -236,7 +238,8 @@ function Reclamos() {
   async function responder(r: Reclamo) {
     setError("");
     try {
-      const { reclamacion } = await api<{ reclamacion: Reclamo }>("/api/panel/reclamaciones", { method: "PATCH", body: JSON.stringify({ id: r.id, respuesta: resp }) });
+      const { reclamacion, enviado } = await api<{ reclamacion: Reclamo; enviado: boolean }>("/api/panel/reclamaciones", { method: "PATCH", body: JSON.stringify({ id: r.id, respuesta: resp }) });
+      if (!enviado) setError("Se guardó la respuesta, pero el correo no se pudo enviar automáticamente. Usa «Abrir correo con la respuesta».");
       setLista((l) => l?.map((x) => (x.id === r.id ? reclamacion : x)) ?? null);
     } catch (e) { setError((e as Error).message); }
   }
@@ -276,9 +279,10 @@ function Reclamos() {
                 </label>
                 <div className="pn-btns" style={{ marginTop: 12 }}>
                   <a className="btn btn-claro btn-chico" href={correo(r, resp)}>Abrir correo con la respuesta</a>
-                  <button className="btn btn-oscuro btn-chico" disabled={resp.trim().length < 5} onClick={() => responder(r)}>{pendiente ? "Marcar como respondido" : "Actualizar respuesta"}</button>
+                  <button className="btn btn-oscuro btn-chico" disabled={resp.trim().length < 5} onClick={() => responder(r)}>{pendiente ? "Enviar respuesta y marcar respondido" : "Actualizar y reenviar respuesta"}</button>
                 </div>
-                {r.respondido_en && <p className="ayuda">Respondido el {new Date(r.respondido_en).toLocaleString("es-PE")}</p>}
+                {r.respondido_en && <p className="ayuda">Respondido el {new Date(r.respondido_en).toLocaleString("es-PE")}{r.respuesta_enviada_en ? " · correo enviado ✓" : ""}</p>}
+                <p className="ayuda">{r.correo_enviado_en ? "✓ La clienta recibió la copia de su hoja por correo." : "⚠️ La copia de la hoja no se envió por correo (revisa la configuración SMTP)."}</p>
               </div>
             )}
           </article>

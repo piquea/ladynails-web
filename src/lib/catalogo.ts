@@ -5,6 +5,7 @@ export type Servicio = {
   grupo: string;
   nombre: string;
   precio: number;
+  precioAntes?: number; // precio de catálogo cuando hay oferta (si existe, el servicio tiene descuento)
   duracion: number;
   sub: string;
   incluye?: string[];
@@ -20,6 +21,8 @@ export const GRUPOS_EXTRA = ["retiro", "diseno"];
 export const activos = (lista: Servicio[]) => lista.filter((s) => s.activo !== false);
 export const buscar = (lista: Servicio[], c: string) => lista.find((s) => s.codigo === c);
 
+export const enOferta = (s: Servicio) => !!s.precioAntes && s.precioAntes > s.precio;
+
 export const soles = (n: number) => `S/ ${n.toFixed(n % 1 ? 2 : 0)}`;
 
 export const duracionTexto = (min: number) => {
@@ -34,5 +37,6 @@ export function calcularReserva(codigos: string[], servicios: Servicio[], montoA
   const duracion = items.reduce((a, s) => a + s.duracion, 0);
   const abono = Math.max(0, Math.min(total, montoAbono));
   const tienePrincipal = items.some((s) => !GRUPOS_EXTRA.includes(s.grupo));
-  return { items, total, duracion, abono, saldo: total - abono, tienePrincipal };
+  const conDescuento = items.some(enOferta);
+  return { items, total, duracion, abono, saldo: total - abono, tienePrincipal, conDescuento };
 }

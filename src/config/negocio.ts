@@ -13,7 +13,7 @@ export const NEGOCIO = {
   email: "hola@ladynails.pe",
   direccion: "Av. Caminos del Inca 131, Edificio G, Of. 305 – Santiago de Surco",
   referencia: "Frente a Sodimac de Chacarilla",
-  mapa: "https://maps.app.goo.gl/ESKcQhzTEU9gW47G8",
+  mapa: "https://maps.app.goo.gl/EqSnBp4XHcDA62vr9",
   razonSocial: "BEAUTY CORP PERU S.A.C.",
   ruc: "20615935396",
 };
@@ -39,6 +39,9 @@ export const AGENDA = {
 
 // Anticipo fijo (Términos y condiciones 4.1): se descuenta del total.
 export const ABONO = { monto: 30 };
+
+// Pago con tarjeta por Mercado Pago (solo servicios a precio de catálogo, sin descuento)
+export const TARJETA = { activo: true, cobrar: "abono" as "abono" | "total" };
 
 export type MetodoPago = { id: string; nombre: string; titulo: string; lineas: string[] };
 export const METODOS_PAGO: MetodoPago[] = [

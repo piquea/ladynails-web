@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { GRUPOS, activos, duracionTexto, soles, type Servicio } from "@/lib/catalogo";
+import { GRUPOS, activos, duracionTexto, enOferta, soles, type Servicio } from "@/lib/catalogo";
 
 export default function Precios({ servicios }: { servicios: Servicio[] }) {
   const [grupo, setGrupo] = useState("manicure");
@@ -24,7 +24,7 @@ export default function Precios({ servicios }: { servicios: Servicio[] }) {
               {s.incluye && <span className="inc">{s.incluye.join(" + ")}</span>}
             </span>
             <span className="dur">{duracionTexto(s.duracion)}</span>
-            <span className="pr">{s.precio ? soles(s.precio) : "Incluido"}</span>
+            <span className="pr">{enOferta(s) && <s className="antes">{soles(s.precioAntes!)}</s>}{s.precio ? soles(s.precio) : "Incluido"}</span>
             <Link className="mas-btn" href={`/reservar?s=${s.codigo}`} aria-label={`Reservar ${s.nombre}`}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M7 17L17 7M8 7h9v9" /></svg>
             </Link>

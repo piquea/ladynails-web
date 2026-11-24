@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { ABONO, AGENDA, HERO, HORARIO, METODOS_PAGO, NEGOCIO, POLITICAS, type Horario, type MetodoPago } from "@/config/negocio";
+import { ABONO, AGENDA, HERO, HORARIO, METODOS_PAGO, NEGOCIO, POLITICAS, TARJETA, type Horario, type MetodoPago } from "@/config/negocio";
 import { SERVICIOS_BASE, type Servicio } from "@/lib/catalogo";
 import { consultar, supabaseConfigurado } from "@/lib/supabase";
 
@@ -9,6 +9,7 @@ export type Ajustes = {
   horario: Horario;
   agenda: typeof AGENDA;
   abono: typeof ABONO;
+  tarjeta: typeof TARJETA;
   metodosPago: MetodoPago[];
   politicas: string[];
   servicios: Servicio[];
@@ -20,6 +21,7 @@ export const AJUSTES_BASE: Ajustes = {
   horario: HORARIO,
   agenda: AGENDA,
   abono: ABONO,
+  tarjeta: TARJETA,
   metodosPago: METODOS_PAGO,
   politicas: POLITICAS,
   servicios: SERVICIOS_BASE,
@@ -74,12 +76,14 @@ export function normalizar(entrada: unknown): Ajustes {
     const nombre = txt(o.nombre, 80);
     if (!codigo || !nombre || vistos.has(codigo)) return [];
     vistos.add(codigo);
+    const precio = num(o.precio, 0, 5000, 0), antes = num(o.precioAntes, 0, 5000, 0);
     const incluye = Array.isArray(o.incluye) ? o.incluye.map((x) => txt(x, 80)).filter(Boolean) : undefined;
     return [{
       codigo, nombre,
       grupo: txt(o.grupo, 20) || "manicure",
       sub: txt(o.sub, 40),
-      precio: num(o.precio, 0, 5000, 0),
+      precio,
+      ...(antes > precio ? { precioAntes: antes } : {}),
       duracion: Math.round(num(o.duracion, 0, 600, 60)),
       activo: o.activo !== false,
       ...(incluye?.length ? { incluye } : {}),
@@ -97,6 +101,7 @@ export function normalizar(entrada: unknown): Ajustes {
       diasAdelante: Math.round(num(g.diasAdelante, 1, 120, B.agenda.diasAdelante)),
     },
     abono: { monto: num(a.monto, 0, 1000, B.abono.monto) },
+    tarjeta: { activo: obj(e.tarjeta).activo !== false, cobrar: obj(e.tarjeta).cobrar === "total" ? "total" : "abono" },
     metodosPago: metodosPago.length ? metodosPago : B.metodosPago,
     politicas: politicas.length ? politicas : B.politicas,
     servicios: servicios.length ? servicios : B.servicios,

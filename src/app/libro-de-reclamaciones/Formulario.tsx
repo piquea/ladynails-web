@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type Proveedor = { razonSocial: string; ruc: string; direccion: string; nombre: string };
-type Listo = { codigo: string; fecha: string };
+type Listo = { codigo: string; fecha: string; enviado?: boolean };
 
 const VACIO = {
   tipo: "", nombre: "", tipoDocumento: "DNI", numeroDocumento: "", domicilio: "", telefono: "", email: "",
@@ -57,8 +57,8 @@ export default function Formulario({ proveedor: P }: { proveedor: Proveedor }) {
         <div className="lr-ok">
           <p className="eyebrow">Hoja de reclamación N.° {listo.codigo}</p>
           <h2 className="titulo-m" style={{ margin: "8px 0 12px" }}>Registramos tu {f.tipo}</h2>
-          <p>Fecha: {fechaHora(listo.fecha)}. Te responderemos al correo <b>{f.email}</b> en un plazo no mayor a <b>15 días hábiles</b>.</p>
-          <p>Guarda o imprime esta hoja como constancia.</p>
+          <p>Fecha: {fechaHora(listo.fecha)} · Te responderemos al correo <b>{f.email}</b> en un plazo no mayor a <b>15 días hábiles</b>.</p>
+          <p>{listo.enviado ? `Te enviamos una copia de esta hoja a ${f.email}.` : ""} Guarda o imprime esta hoja como constancia.</p>
         </div>
         <dl className="lr-resumen">
           <div><dt>Tipo</dt><dd>{f.tipo === "reclamo" ? "Reclamo" : "Queja"}</dd></div>

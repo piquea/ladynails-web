@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
 import { obtenerAjustes } from "@/lib/ajustes";
+import { crearLinkPago, mpConfigurado } from "@/lib/mercadopago";
 import { calcularReserva, duracionTexto, soles } from "@/lib/catalogo";
 import { aHora, aMin, ahoraLima, fechaLarga, hora12, horasLibres, sumarDias } from "@/lib/agenda";
 import { ocupacionDelDia } from "@/lib/ocupacion";
-import { insertar, subirArchivo, supabaseConfigurado, actualizar } from "@/lib/supabase";
+import { consultar, insertar, subirArchivo, supabaseConfigurado, actualizar } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -41,11 +42,17 @@ export async function POST(req: Request) {
   const celular = (datos.cliente?.celular ?? "").replace(/[^\d+]/g, "").slice(0, 15);
   if (nombre.length < 2) return err("Escribe tu nombre.");
   if (celular.replace(/\D/g, "").length < 9) return err("Escribe un celular válido.");
-  if (!METODOS_PAGO.some((m) => m.id === datos.pago)) return err("Elige un método de pago.");
+  const tarjeta = datos.pago === "tarjeta";
+  if (tarjeta) {
+    if (!aj.tarjeta.activo || !mpConfigurado() || !supabaseConfigurado()) return err("El pago con tarjeta no está disponible por ahora. Elige otro método.");
+    if (r.conDescuento) return err("El pago con tarjeta es solo para servicios a precio de catálogo. Elige Yape o transferencia.");
+  } else if (!METODOS_PAGO.some((m) => m.id === datos.pago)) return err("Elige un método de pago.");
   if (!datos.acepto) return err("Debes aceptar los Términos y condiciones.");
-  if (!archivo) return err("Adjunta la constancia de tu abono.");
-  if (archivo.size > 5 * 1024 * 1024) return err("La constancia pesa más de 5 MB. Sube una captura más liviana.");
-  if (archivo.type && !TIPOS.includes(archivo.type)) return err("La constancia debe ser una imagen o un PDF.");
+  // Con tarjeta se cobra el abono o el total, según el panel
+  const cobro = tarjeta && aj.tarjeta.cobrar === "total" ? r.total : r.abono;
+  if (!tarjeta && !archivo) return err("Adjunta la constancia de tu abono.");
+  if (archivo && archivo.size > 5 * 1024 * 1024) return err("La constancia pesa más de 5 MB. Sube una captura más liviana.");
+  if (archivo && archivo.type && !TIPOS.includes(archivo.type)) return err("La constancia debe ser una imagen o un PDF.");
 
   const hoy = ahoraLima().fecha;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(datos.fecha) || datos.fecha < hoy || datos.fecha > sumarDias(hoy, AGENDA.diasAdelante))
@@ -60,12 +67,13 @@ export async function POST(req: Request) {
   const codigo = `LN-${datos.fecha.slice(2).replace(/-/g, "")}-${randomBytes(2).toString("hex").toUpperCase()}`;
   const horaFin = aHora(aMin(datos.hora) + r.duracion);
   let guardado = false;
+  let pagar: string | null = null;
 
   if (supabaseConfigurado()) {
     try {
       const [fila] = (await insertar("reservas", {
         codigo,
-        estado: "por_validar",
+        estado: tarjeta ? "pago_pendiente" : "por_validar",
         cliente_nombre: nombre,
         cliente_celular: celular,
         cliente_email: datos.cliente.email?.trim().slice(0, 120) || null,
@@ -76,12 +84,34 @@ export async function POST(req: Request) {
         duracion_min: r.duracion,
         items: r.items.map((s) => ({ codigo: s.codigo, nombre: s.nombre, grupo: s.grupo, precio: s.precio, duracion: s.duracion })),
         total: r.total,
-        abono: r.abono,
-        saldo: r.saldo,
+        abono: cobro,
+        saldo: r.total - cobro,
         metodo_pago: datos.pago,
         notas: datos.notas?.trim().slice(0, 600) || null,
       })) as { id: number }[];
       guardado = true;
+      if (tarjeta) {
+        const base = process.env.URL || new URL(req.url).origin;
+        const pref = await crearLinkPago({
+          codigo, monto: cobro, nombre, email: datos.cliente.email,
+          titulo: `${cobro === r.total ? "Pago" : "Abono"} reserva Lady Nails ${codigo}`,
+          descripcion: `${r.items.map((s) => s.nombre).join(" + ")} · ${datos.fecha} ${datos.hora}`,
+        }, base);
+        if (!pref) {
+          await actualizar(`reservas?id=eq.${fila.id}`, { estado: "anulada" });
+          return err("No pudimos abrir Mercado Pago. Intenta de nuevo o elige otro método.", 502);
+        }
+        await actualizar(`reservas?id=eq.${fila.id}`, { mp_preferencia: pref.id });
+        pagar = pref.link;
+      }
+    } catch (e) {
+      console.error("reserva", e);
+      return err("No pudimos guardar tu reserva. Escríbenos por WhatsApp y te ayudamos.", 500);
+    }
+  }
+  if (archivo && supabaseConfigurado() && guardado) {
+    try {
+      const [fila] = (await consultar(`reservas?select=id&codigo=eq.${codigo}`)) as { id: number }[];
       const ext = archivo.type === "application/pdf" ? "pdf" : (archivo.type.split("/")[1] || "jpg").replace("jpeg", "jpg");
       const ruta = `${datos.fecha}/${codigo}.${ext}`;
       try {
@@ -91,8 +121,7 @@ export async function POST(req: Request) {
         console.error("constancia", e);
       }
     } catch (e) {
-      console.error("reserva", e);
-      return err("No pudimos guardar tu reserva. Escríbenos por WhatsApp y te ayudamos.", 500);
+      console.error("constancia", e);
     }
   }
 
@@ -106,14 +135,15 @@ export async function POST(req: Request) {
     ...r.items.map((s) => `• ${grupoNombre[s.grupo] ? grupoNombre[s.grupo] + " " : ""}${s.nombre} — ${soles(s.precio)}`),
     ``,
     `Total: ${soles(r.total)}`,
-    `Abono (${METODOS_PAGO.find((m) => m.id === datos.pago)?.nombre}): ${soles(r.abono)} ✅ constancia adjunta en la web`,
-    `Saldo en el studio: ${soles(r.saldo)}`,
+    tarjeta ? `Pago con tarjeta (Mercado Pago): ${soles(cobro)}` : `Abono (${METODOS_PAGO.find((m) => m.id === datos.pago)?.nombre}): ${soles(cobro)} ✅ constancia adjunta en la web`,
+    `Saldo en el studio: ${soles(r.total - cobro)}`,
   ].join("\n");
 
   return NextResponse.json({
     codigo,
     guardado,
-    resumen: { fecha: datos.fecha, hora: datos.hora, horaFin, total: r.total, abono: r.abono, saldo: r.saldo },
+    pagar,
+    resumen: { fecha: datos.fecha, hora: datos.hora, horaFin, total: r.total, abono: cobro, saldo: r.total - cobro },
     whatsapp: `https://wa.me/${NEGOCIO.whatsapp}?text=${encodeURIComponent(texto)}`,
   });
 }

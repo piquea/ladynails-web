@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SISTEMAS, type Sistema } from "@/data/sistemas";
-import { activos, buscar, duracionTexto, soles, type Servicio } from "@/lib/catalogo";
+import { activos, buscar, duracionTexto, enOferta, soles, type Servicio } from "@/lib/catalogo";
 
 const ETIQUETA: Record<string, string> = { manicure: "Manicure", pedicure: "Pedicure", manipedi: "", retoque: "Retoque" };
 
@@ -56,7 +56,7 @@ export default function Sistemas({ servicios: todos }: { servicios: Servicio[] }
                   return (
                     <div key={c} className="fila-precio" style={{ gridTemplateColumns: "1fr auto auto" }}>
                       <span>{ETIQUETA[s.grupo] ? `${ETIQUETA[s.grupo]} · ` : ""}{s.nombre}<span className="inc">{duracionTexto(s.duracion)}</span></span>
-                      <span className="pr">{soles(s.precio)}</span>
+                      <span className="pr">{enOferta(s) && <s className="antes">{soles(s.precioAntes!)}</s>}{soles(s.precio)}</span>
                       <Link href={`/reservar?s=${c}`} className="btn btn-oscuro btn-chico">Reservar</Link>
                     </div>
                   );

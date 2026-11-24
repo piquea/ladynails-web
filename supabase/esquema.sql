@@ -84,3 +84,11 @@ create index if not exists reclamaciones_creado on reclamaciones (creado_en desc
 create index if not exists reservas_creado on reservas (creado_en desc);
 alter table ajustes       enable row level security;
 alter table reclamaciones enable row level security;
+
+-- ---------- Pago con tarjeta y correos (24/11/2026) ----------
+alter table reservas add column if not exists mp_preferencia text;
+alter table reservas add column if not exists mp_pago_id text;
+alter table reservas add column if not exists pagado_en timestamptz;
+create index if not exists reservas_codigo on reservas (codigo);
+alter table reclamaciones add column if not exists correo_enviado_en timestamptz;
+alter table reclamaciones add column if not exists respuesta_enviada_en timestamptz;

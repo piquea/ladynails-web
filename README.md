@@ -24,6 +24,11 @@ Usa la hoja **"Servicios"**; los códigos (MNC001, PCK001…) son los mismos del
 
 - **Next.js** — la web
 - **Supabase** — guarda las reservas y las constancias (`supabase/esquema.sql`)
-- **Netlify** — publica la web (variables `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` y `ADMIN_CLAVE`)
+- **Netlify** — publica la web. Variables:
+  - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` — base de datos
+  - `ADMIN_CLAVE` — clave del panel
+  - `MP_ACCESS_TOKEN` — Access Token de producción de Mercado Pago de Lady Nails (pago con tarjeta)
+  - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, opcional `SMTP_COPIA` — correos del Libro de Reclamaciones
+- **Mercado Pago** — en su panel, Webhooks → URL `https://TU-WEB/api/mercadopago/webhook`, evento *Pagos*
 - **GitHub** — guarda el código
 

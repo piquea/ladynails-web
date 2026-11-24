@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import { BotonWhatsApp } from "@/components/Pie";
 import { obtenerAjustes } from "@/lib/ajustes";
+import { mpConfigurado } from "@/lib/mercadopago";
 import Reservar from "./Reservar";
 
 export const metadata: Metadata = { title: "Reservar cita · Lady Nails Studio" };
@@ -19,6 +20,7 @@ export default async function Pagina() {
             servicios={aj.servicios} horario={aj.horario} agenda={aj.agenda} abono={aj.abono}
             metodosPago={aj.metodosPago} politicas={aj.politicas}
             whatsapp={aj.negocio.whatsapp} direccion={aj.negocio.direccion}
+            tarjeta={{ disponible: aj.tarjeta.activo && mpConfigurado(), cobrar: aj.tarjeta.cobrar }}
           />
         </Suspense>
       </main>
