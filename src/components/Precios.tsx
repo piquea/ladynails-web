@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { GRUPOS, SERVICIOS, duracionTexto, soles } from "@/lib/catalogo";
+import { GRUPOS, activos, duracionTexto, soles, type Servicio } from "@/lib/catalogo";
 
-export default function Precios() {
+export default function Precios({ servicios }: { servicios: Servicio[] }) {
   const [grupo, setGrupo] = useState("manicure");
-  const lista = SERVICIOS.filter((s) => s.grupo === grupo);
+  const lista = activos(servicios).filter((s) => s.grupo === grupo);
   return (
     <div>
       <div className="pestanas" role="tablist">

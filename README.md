@@ -2,21 +2,16 @@
 
 Landing + reservas en línea con abono (Yape, Plin o transferencia con constancia).
 
-## Qué editar sin saber programar
+## Panel interno — `/panel`
 
-| Quiero cambiar…                                 | Archivo |
-|-------------------------------------------------|---------|
-| WhatsApp, Instagram, dirección                  | `src/config/negocio.ts` → `NEGOCIO` |
-| Horario de atención, días cerrados              | `src/config/negocio.ts` → `HORARIO`, `AGENDA.fechasBloqueadas` |
-| Cuántas citas a la vez (manicuristas)           | `src/config/negocio.ts` → `AGENDA.manicuristas` |
-| % del abono                                     | `src/config/negocio.ts` → `ABONO` |
-| Números de Yape / Plin / cuentas                | `src/config/negocio.ts` → `DATOS_PAGO` |
-| Políticas de reserva                            | `src/config/negocio.ts` → `POLITICAS` |
-| Textos de los sistemas (Rubber, Builder…)       | `src/data/sistemas.ts` |
-| Precios y servicios                             | `src/data/servicios.json` (se genera desde el Excel) |
-| Fotos                                           | `public/fotos/` |
+Entra con la clave de la variable `ADMIN_CLAVE` (Netlify). Ahí se maneja todo sin tocar código:
 
-En GitHub: abre el archivo → lápiz ✏️ → edita → **Commit changes**. Netlify publica solo en ~2 minutos.
+- **Reservas:** ver las citas por fecha, abrir la constancia, confirmar el abono, avisar por WhatsApp, marcar atendida o anular.
+- **Bloqueos de agenda:** feriados, capacitaciones o cuando falta una manicurista.
+- **Libro de reclamaciones:** hojas recibidas, días hábiles transcurridos (plazo 15) y respuesta.
+- **Contenido de la web:** precios y servicios, textos de portada, horario, agenda, abono, métodos de pago, políticas y contacto.
+
+Los valores iniciales están en `src/config/negocio.ts` y `src/data/servicios.json`; lo que se guarda en el panel los reemplaza.
 
 ## Actualizar precios desde el Excel
 
@@ -29,10 +24,6 @@ Usa la hoja **"Servicios"**; los códigos (MNC001, PCK001…) son los mismos del
 
 - **Next.js** — la web
 - **Supabase** — guarda las reservas y las constancias (`supabase/esquema.sql`)
-- **Netlify** — publica la web (variables `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`)
+- **Netlify** — publica la web (variables `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` y `ADMIN_CLAVE`)
 - **GitHub** — guarda el código
 
-## Bloquear horas
-
-En Supabase → Table editor → `bloqueos_agenda`: agrega una fila con la fecha.
-Sin horas = todo el día. `cupos` = cuántas manicuristas faltan (3 = nadie atiende).

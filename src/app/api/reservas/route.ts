@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
-import { AGENDA, METODOS_PAGO, NEGOCIO } from "@/config/negocio";
+import { obtenerAjustes } from "@/lib/ajustes";
 import { calcularReserva, duracionTexto, soles } from "@/lib/catalogo";
 import { aHora, aMin, ahoraLima, fechaLarga, hora12, horasLibres, sumarDias } from "@/lib/agenda";
 import { ocupacionDelDia } from "@/lib/ocupacion";
@@ -33,14 +33,16 @@ export async function POST(req: Request) {
   }
 
   // ---- Validaciones ----
-  const r = calcularReserva(Array.isArray(datos.servicios) ? datos.servicios.slice(0, 8) : []);
+  const aj = await obtenerAjustes();
+  const { agenda: AGENDA, metodosPago: METODOS_PAGO, negocio: NEGOCIO } = aj;
+  const r = calcularReserva(Array.isArray(datos.servicios) ? datos.servicios.slice(0, 8) : [], aj.servicios, aj.abono.monto);
   if (!r.items.length || !r.tienePrincipal) return err("Elige al menos un servicio.");
   const nombre = (datos.cliente?.nombre ?? "").trim().slice(0, 80);
   const celular = (datos.cliente?.celular ?? "").replace(/[^\d+]/g, "").slice(0, 15);
   if (nombre.length < 2) return err("Escribe tu nombre.");
   if (celular.replace(/\D/g, "").length < 9) return err("Escribe un celular válido.");
   if (!METODOS_PAGO.some((m) => m.id === datos.pago)) return err("Elige un método de pago.");
-  if (!datos.acepto) return err("Debes aceptar las políticas de reserva.");
+  if (!datos.acepto) return err("Debes aceptar los Términos y condiciones.");
   if (!archivo) return err("Adjunta la constancia de tu abono.");
   if (archivo.size > 5 * 1024 * 1024) return err("La constancia pesa más de 5 MB. Sube una captura más liviana.");
   if (archivo.type && !TIPOS.includes(archivo.type)) return err("La constancia debe ser una imagen o un PDF.");
@@ -50,9 +52,9 @@ export async function POST(req: Request) {
     return err("Elige una fecha válida.");
   if (!/^\d{2}:\d{2}$/.test(datos.hora)) return err("Elige una hora.");
 
-  const ocupados = await ocupacionDelDia(datos.fecha).catch(() => null);
+  const ocupados = await ocupacionDelDia(datos.fecha, AGENDA.manicuristas).catch(() => null);
   if (!ocupados) return err("No pudimos revisar la agenda. Intenta de nuevo.", 500);
-  if (!horasLibres(datos.fecha, r.duracion, ocupados).includes(datos.hora))
+  if (!horasLibres(datos.fecha, r.duracion, ocupados, aj.horario, AGENDA).includes(datos.hora))
     return err("Esa hora acaba de ocuparse. Elige otra, por favor.", 409);
 
   const codigo = `LN-${datos.fecha.slice(2).replace(/-/g, "")}-${randomBytes(2).toString("hex").toUpperCase()}`;

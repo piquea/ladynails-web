@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { NEGOCIO } from "@/config/negocio";
 
 export default function Nav({ simple = false }: { simple?: boolean }) {
   const [abierta, setAbierta] = useState(false);
@@ -22,7 +21,7 @@ export default function Nav({ simple = false }: { simple?: boolean }) {
           <a href={ir("#experiencia")}>Experiencia</a>
           <a href={ir("#precios")}>Precios</a>
           <a href={ir("#preguntas")}>Preguntas</a>
-          <a href={ir("#studio")}>Studio</a>
+          <a href={ir("#contacto")}>Contacto</a>
         </nav>
         <button className="nav-menu" aria-label="Menú" onClick={() => setAbierta(!abierta)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -31,7 +30,6 @@ export default function Nav({ simple = false }: { simple?: boolean }) {
         </button>
       </div>
       <div className="nav-acciones">
-        <a className="wa" href={`https://wa.me/${NEGOCIO.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a>
         <Link href="/reservar" className="btn btn-claro">Reservar cita</Link>
       </div>
     </header>

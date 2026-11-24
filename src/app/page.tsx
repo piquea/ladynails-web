@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
-import Pie from "@/components/Pie";
+import Pie, { BotonWhatsApp } from "@/components/Pie";
 import Sistemas from "@/components/Sistemas";
 import Precios from "@/components/Precios";
-import { ABONO, NEGOCIO } from "@/config/negocio";
-import { porCodigo, soles } from "@/lib/catalogo";
+import { activos, buscar, soles, type Servicio } from "@/lib/catalogo";
+import { obtenerAjustes, type Ajustes } from "@/lib/ajustes";
+
+export const revalidate = 3600;
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -15,17 +17,22 @@ const PILARES = [
   { t: "La forma Lady Nails", d: "Procesos definidos para que tu servicio se vea igual de bien, te atienda quien te atienda." },
 ];
 
-const PREGUNTAS = [
-  { p: "¿Cómo reservo mi cita?", r: `Elige tus servicios, la fecha y una hora disponible. Paga el abono (${ABONO.porcentaje}% del total) por Yape o transferencia (BCP o BBVA) y sube tu constancia. Te escribimos por WhatsApp para confirmar.` },
-  { p: "¿Por qué piden un abono?", r: "Separa la hora de tu manicurista solo para ti. El abono se descuenta de tu servicio y el saldo lo pagas en el studio." },
+const preguntas = (aj: Ajustes) => [
+  { p: "¿Cómo reservo mi cita?", r: `Elige tus servicios, la fecha y una hora disponible. Paga el abono de ${soles(aj.abono.monto)} por ${aj.metodosPago.map((m) => m.nombre).join(", ")} y sube tu constancia. Te escribimos por WhatsApp para confirmar.` },
+  { p: "¿Por qué piden un abono?", r: "Separa la hora de tu manicurista solo para ti. El abono se descuenta de tu servicio y el saldo lo pagas en el studio al terminar." },
   { p: "¿Qué sistema me conviene?", r: "Si quieres mantener tu uña natural: Rubber Gel o Builder Gel (más estructura). Si buscas largo: Polygel, Acrílicas o Soft Gel. Toca cada sistema arriba para ver para quién es ideal, o escríbenos y te ayudamos a elegir." },
   { p: "Tengo un trabajo de otro studio, ¿lo pueden retirar?", r: "Sí. Agrega el retiro a tu reserva en la pestaña «Retiro de otro studio» para que separemos el tiempo necesario." },
-  { p: "¿Puedo reprogramar mi cita?", r: "Sí, escríbenos por WhatsApp con al menos 24 horas de anticipación y buscamos otra fecha contigo." },
-  { p: "¿Dónde están?", r: `${NEGOCIO.direccion}. ${NEGOCIO.referencia}.` },
+  { p: "¿Puedo reprogramar mi cita?", r: "Sí, escríbenos por WhatsApp con al menos 1 día de anticipación: tu abono pasa a la nueva cita. Si no asistes o cancelas con menos tiempo, el abono no es reembolsable." },
+  { p: "¿Emiten boleta o factura?", r: `Sí, somos ${aj.negocio.razonSocial} (RUC ${aj.negocio.ruc}). Emitimos boleta o factura electrónica; si necesitas factura, indícanos tu RUC al momento del pago.` },
+  { p: "¿Dónde están?", r: `${aj.negocio.direccion}. ${aj.negocio.referencia}.` },
 ];
 
-export default function Inicio() {
-  const gel = porCodigo("MNC003")!, manipedi = porCodigo("PCK003")!, ext = porCodigo("MNC005")!;
+const precio = (lista: Servicio[], c: string) => buscar(activos(lista), c)?.precio;
+
+export default async function Inicio() {
+  const aj = await obtenerAjustes();
+  const gel = precio(aj.servicios, "MNC003"), manipedi = precio(aj.servicios, "PCK003");
+  const ext = Math.min(...["MNC005", "MNC006", "MNC007", "MNC008", "MNC013"].map((c) => precio(aj.servicios, c) ?? 9999));
   return (
     <>
       <Nav />
@@ -34,11 +41,11 @@ export default function Inicio() {
       <section className="contenedor hero">
         <div className="hero-texto">
           <h1 className="titulo-hero sube">
-            Perfect nails.<br />
-            <span className="it">Every time.</span>
+            {aj.hero.titulo1}
+            {aj.hero.titulo2 && <><br /><span className="it">{aj.hero.titulo2}</span></>}
           </h1>
           <p className="hero-bajada sube sube-2">
-            Manicure y pedicure en Chacarilla con técnicas que cuidan tu uña natural, estándares claros y un espacio pensado para ti.
+            {aj.hero.bajada}
           </p>
           <div className="fila sube sube-3">
             <Link href="/reservar" className="btn btn-oscuro">Reservar mi cita</Link>
@@ -48,7 +55,7 @@ export default function Inicio() {
         <div className="hero-foto sube">
           <img src="/fotos/hero-vino.webp" alt="Clienta mostrando su manicure color vino en Lady Nails Studio" fetchPriority="high" />
           <img className="hero-emblema" src="/marca/emblema-crema.png" alt="" width={300} height={251} />
-          <p className="hero-nota">Reserva en línea en minutos y separa tu hora con un abono del {ABONO.porcentaje}%. El resto, lo pagas en el studio.</p>
+          <p className="hero-nota">Reserva en línea en minutos y separa tu hora con un abono de {soles(aj.abono.monto)}. El resto, lo pagas en el studio.</p>
         </div>
       </section>
 
@@ -70,7 +77,7 @@ export default function Inicio() {
             </div>
             <p className="eyebrow der">Cinco técnicas, una misma<br />forma de trabajar.</p>
           </div>
-          <Sistemas />
+          <Sistemas servicios={aj.servicios} />
         </div>
 
         {/* EXPERIENCIA */}
@@ -134,25 +141,25 @@ export default function Inicio() {
           <div className="planes">
             <div className="plan plan-1">
               <span className="nom">Manicure gel</span>
-              <span className="precio">{soles(gel.precio)}</span>
+              <span className="precio">{gel !== undefined ? soles(gel) : "—"}</span>
               <p className="txt">Esmaltado gel con brillo duradero. El clásico de todos los días.</p>
               <Link href="/reservar?s=MNC003" className="btn btn-claro btn-chico">Reservar</Link>
             </div>
             <div className="plan plan-2">
               <span className="sello">Mani + Pedi</span>
               <span className="nom">ManiPedi Gel</span>
-              <span className="precio">{soles(manipedi.precio)}</span>
+              <span className="precio">{manipedi !== undefined ? soles(manipedi) : "—"}</span>
               <p className="txt">Manicure y pedicure con esmaltado gel en una sola visita.</p>
               <Link href="/reservar?s=PCK003" className="btn btn-oscuro btn-chico">Reservar</Link>
             </div>
             <div className="plan plan-3">
               <span className="nom">Extensiones</span>
-              <span className="precio">Desde {soles(ext.precio)}</span>
+              <span className="precio">Desde {soles(ext)}</span>
               <p className="txt">Polygel, acrílicas, builder gel y soft gel. El largo y la forma que elijas.</p>
               <a href="#sistemas" className="btn btn-claro btn-chico">Ver sistemas</a>
             </div>
           </div>
-          <Precios />
+          <Precios servicios={aj.servicios} />
         </section>
 
         {/* PREGUNTAS */}
@@ -160,7 +167,7 @@ export default function Inicio() {
           <p className="marca-eyebrow"><img src="/marca/emblema-vino.png" alt="" width={300} height={251} />Preguntas</p>
           <h2 className="titulo-l" style={{ marginBottom: 32 }}>Las que más <span className="it">nos hacen.</span></h2>
           <div className="faq">
-            {PREGUNTAS.map((q, i) => (
+            {preguntas(aj).map((q, i) => (
               <details key={q.p} open={i === 0}>
                 <summary>{q.p}<span className="flecha">↘</span></summary>
                 <p className="resp">{q.r}</p>
@@ -181,8 +188,9 @@ export default function Inicio() {
             <Link href="/reservar" className="btn btn-oscuro">Reservar cita</Link>
           </div>
         </section>
-        <Pie />
       </div>
+      <Pie aj={aj} />
+      <BotonWhatsApp numero={aj.negocio.whatsapp} />
     </>
   );
 }

@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SISTEMAS, type Sistema } from "@/data/sistemas";
-import { duracionTexto, porCodigo, soles } from "@/lib/catalogo";
+import { activos, buscar, duracionTexto, soles, type Servicio } from "@/lib/catalogo";
 
 const ETIQUETA: Record<string, string> = { manicure: "Manicure", pedicure: "Pedicure", manipedi: "", retoque: "Retoque" };
 
-export default function Sistemas() {
+export default function Sistemas({ servicios: todos }: { servicios: Servicio[] }) {
+  const servicios = activos(todos);
+  const porCodigo = (c: string) => buscar(servicios, c);
   const [abierto, setAbierto] = useState<Sistema | null>(null);
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && setAbierto(null);
@@ -19,7 +21,8 @@ export default function Sistemas() {
     <>
       <div className="tarjetas-5">
         {SISTEMAS.map((s) => {
-          const desde = Math.min(...s.codigos.map((c) => porCodigo(c)?.precio ?? 9999));
+          const precios = s.codigos.map((c) => porCodigo(c)?.precio).filter((x): x is number => x !== undefined);
+          const desde = precios.length ? Math.min(...precios) : 0;
           return (
             <button key={s.id} className="tarjeta-foto" onClick={() => setAbierto(s)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,7 +30,7 @@ export default function Sistemas() {
               <div className="vidrio">
                 <h3>{s.nombre}</h3>
                 <p>{s.bajada}</p>
-                <div className="mas"><span>Desde {soles(desde)}</span><span>Ver más ↗</span></div>
+                <div className="mas"><span>{desde ? `Desde ${soles(desde)}` : "Consúltanos"}</span><span>Ver más ↗</span></div>
               </div>
             </button>
           );

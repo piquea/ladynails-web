@@ -3,14 +3,18 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ABONO, AGENDA, DATOS_PAGO, METODOS_PAGO, NEGOCIO, POLITICAS } from "@/config/negocio";
-import { GRUPOS, GRUPOS_EXTRA, SERVICIOS, calcularReserva, duracionTexto, porCodigo, soles } from "@/lib/catalogo";
+import type { Ajustes } from "@/lib/ajustes";
+import { GRUPOS, GRUPOS_EXTRA, activos, buscar, calcularReserva, duracionTexto, soles } from "@/lib/catalogo";
 import { ahoraLima, diaAbierto, fechaLarga, hora12, sumarDias } from "@/lib/agenda";
 
 const PASOS = ["Servicios", "Fecha y hora", "Tus datos", "Abono"];
 type Listo = { codigo: string; whatsapp: string; guardado: boolean };
 
-export default function Reservar() {
+type Props = Pick<Ajustes, "servicios" | "horario" | "agenda" | "abono" | "metodosPago" | "politicas"> & { whatsapp: string; direccion: string };
+
+export default function Reservar({ servicios: todos, horario, agenda: AGENDA, abono, metodosPago: METODOS_PAGO, politicas: POLITICAS, direccion }: Props) {
+  const SERVICIOS = useMemo(() => activos(todos), [todos]);
+  const porCodigo = (c: string) => buscar(SERVICIOS, c);
   const sp = useSearchParams();
   const [paso, setPaso] = useState(0);
   const [sel, setSel] = useState<string[]>(() => {
@@ -24,7 +28,7 @@ export default function Reservar() {
   const [cargando, setCargando] = useState(false);
   const [cliente, setCliente] = useState({ nombre: "", celular: "", email: "", primeraVez: true });
   const [notas, setNotas] = useState("");
-  const [pago, setPago] = useState("yape");
+  const [pago, setPago] = useState(METODOS_PAGO[0]?.id ?? "");
   const [archivo, setArchivo] = useState<File | null>(null);
   const [acepto, setAcepto] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -32,13 +36,13 @@ export default function Reservar() {
   const [listo, setListo] = useState<Listo | null>(null);
   const [recarga, setRecarga] = useState(0);
 
-  const r = useMemo(() => calcularReserva(sel), [sel]);
+  const r = useMemo(() => calcularReserva(sel, todos, abono.monto), [sel, todos, abono.monto]);
 
   // Se calcula en el navegador (la página se genera una vez y "hoy" cambia cada día)
   const [dias, setDias] = useState<string[]>([]);
   useEffect(() => {
     const hoy = ahoraLima().fecha;
-    setDias(Array.from({ length: AGENDA.diasAdelante + 1 }, (_, i) => sumarDias(hoy, i)).filter(diaAbierto));
+    setDias(Array.from({ length: AGENDA.diasAdelante + 1 }, (_, i) => sumarDias(hoy, i)).filter((d) => diaAbierto(d, horario)));
   }, []);
 
   // Al cambiar servicios o fecha, la hora elegida puede dejar de servir
@@ -114,7 +118,7 @@ export default function Reservar() {
         <p style={{ fontSize: 15, lineHeight: 1.6, maxWidth: 520, margin: "0 auto" }}>
           Recibimos tu reserva para el <b>{fechaLarga(fecha).toLowerCase()}</b> a las <b>{hora12(hora)}</b>. Vamos a validar tu abono de <b>{soles(r.abono)}</b> y te confirmamos por WhatsApp.
         </p>
-        <p className="chica" style={{ margin: "14px auto 26px", maxWidth: 420 }}>Saldo a pagar en el studio: {soles(r.saldo)}. {NEGOCIO.direccion}.</p>
+        <p className="chica" style={{ margin: "14px auto 26px", maxWidth: 420 }}>Saldo a pagar en el studio: {soles(r.saldo)}. {direccion}.</p>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
           <a className="btn btn-oscuro" href={listo.whatsapp} target="_blank" rel="noopener">Enviar mi reserva por WhatsApp</a>
           <Link className="btn btn-claro" href="/">Volver al inicio</Link>
@@ -222,15 +226,15 @@ export default function Reservar() {
         {paso === 3 && (
           <section>
             <h1 className="titulo-m">Separa tu hora con un <span className="it">abono</span></h1>
-            <p className="ayuda">Paga {soles(r.abono)} ({ABONO.porcentaje}% del total) y sube tu constancia. El saldo de {soles(r.saldo)} lo pagas en el studio.</p>
+            <p className="ayuda">Paga el abono de {soles(r.abono)} y sube tu constancia. El saldo de {soles(r.saldo)} lo pagas en el studio.</p>
             <div className="pestanas" style={{ marginTop: 20 }}>
               {METODOS_PAGO.map((m) => (
                 <button key={m.id} className={`pestana ${pago === m.id ? "activa" : ""}`} onClick={() => setPago(m.id)}>{m.nombre}</button>
               ))}
             </div>
             <div className="datos-pago">
-              {(DATOS_PAGO[pago] ?? []).map((b) => (
-                <div key={b.titulo}>
+              {METODOS_PAGO.filter((m) => m.id === pago).map((b) => (
+                <div key={b.id}>
                   <span className="etq">{b.titulo}</span>
                   {b.lineas.map((l) => (
                     <p key={l}>{l}<button onClick={() => navigator.clipboard?.writeText(l.replace(/\s/g, ""))}>Copiar</button></p>
@@ -248,7 +252,7 @@ export default function Reservar() {
             </div>
             <label className="acepto">
               <input type="checkbox" checked={acepto} onChange={(e) => setAcepto(e.target.checked)} />
-              <span>Leí y acepto las políticas de reserva.</span>
+              <span>Leí y acepto los <a href="/terminos" target="_blank" style={{ textDecoration: "underline" }}>Términos y condiciones</a> y la política de privacidad.</span>
             </label>
           </section>
         )}

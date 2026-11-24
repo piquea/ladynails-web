@@ -1,4 +1,6 @@
-import { AGENDA, HORARIO } from "@/config/negocio";
+import type { AGENDA, Horario } from "@/config/negocio";
+
+type Agenda = typeof AGENDA;
 
 export const aMin = (h: string) => {
   const [a, b] = h.split(":").map(Number);
@@ -33,8 +35,26 @@ export const fechaLarga = (f: string) => {
   return t.charAt(0).toUpperCase() + t.slice(1);
 };
 
-export function diaAbierto(fecha: string) {
-  return !!HORARIO[diaSemana(fecha)] && !AGENDA.fechasBloqueadas.includes(fecha);
+export const diaAbierto = (fecha: string, horario: Horario) => !!horario[diaSemana(fecha)];
+
+const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+/** "Lunes a sábado · 10:00 a. m. – 7:00 p. m." agrupando días seguidos con el mismo horario */
+export function textoHorario(horario: Horario) {
+  const orden = [1, 2, 3, 4, 5, 6, 0];
+  const grupos: { dias: number[]; clave: string }[] = [];
+  for (const d of orden) {
+    const h = horario[d];
+    const clave = h ? `${h.abre}-${h.cierra}` : "cerrado";
+    const ult = grupos[grupos.length - 1];
+    if (ult && ult.clave === clave) ult.dias.push(d);
+    else grupos.push({ dias: [d], clave });
+  }
+  return grupos.map((g) => {
+    const a = DIAS[g.dias[0]], b = DIAS[g.dias[g.dias.length - 1]].toLowerCase();
+    const dias = g.dias.length === 1 ? (g.dias[0] === 0 ? "Domingos" : a) : g.dias.length === 2 ? `${a} y ${b}` : `${a} a ${b}`;
+    const h = horario[g.dias[0]];
+    return { dias, horas: h ? `${hora12(h.abre)} – ${hora12(h.cierra)}` : "Cerrado" };
+  });
 }
 
 export type Ocupado = { inicio: number; fin: number; cupos?: number };
@@ -43,20 +63,20 @@ export type Ocupado = { inicio: number; fin: number; cupos?: number };
  * Horas de inicio libres para una cita de `duracion` minutos.
  * Una hora sirve si en todo el rango hay menos citas a la vez que manicuristas.
  */
-export function horasLibres(fecha: string, duracion: number, ocupados: Ocupado[]) {
-  const h = HORARIO[diaSemana(fecha)];
-  if (!h || AGENDA.fechasBloqueadas.includes(fecha)) return [];
+export function horasLibres(fecha: string, duracion: number, ocupados: Ocupado[], horario: Horario, agenda: Agenda) {
+  const h = horario[diaSemana(fecha)];
+  if (!h) return [];
   const ahora = ahoraLima();
   if (fecha < ahora.fecha) return [];
-  const minimo = fecha === ahora.fecha ? ahora.min + AGENDA.anticipacionHoras * 60 : 0;
-  const abre = aMin(h.abre), cierra = aMin(h.cierra), dur = Math.max(duracion, AGENDA.intervaloMin);
+  const minimo = fecha === ahora.fecha ? ahora.min + agenda.anticipacionHoras * 60 : 0;
+  const abre = aMin(h.abre), cierra = aMin(h.cierra), dur = Math.max(duracion, agenda.intervaloMin);
   const libres: string[] = [];
-  for (let ini = abre; ini + dur <= cierra; ini += AGENDA.intervaloMin) {
+  for (let ini = abre; ini + dur <= cierra; ini += agenda.intervaloMin) {
     if (ini < minimo) continue;
     let ok = true;
     for (let t = ini; t < ini + dur && ok; t += 15) {
       const usados = ocupados.filter((o) => o.inicio <= t && t < o.fin).reduce((a, o) => a + (o.cupos ?? 1), 0);
-      if (usados >= AGENDA.manicuristas) ok = false;
+      if (usados >= agenda.manicuristas) ok = false;
     }
     if (ok) libres.push(aHora(ini));
   }
